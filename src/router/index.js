@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import MainPage from "@/components/MainPage.vue";
 import Profile from "@/components/Profile.vue";
 
-const routes = createRouter({
+const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
@@ -18,5 +18,4 @@ const routes = createRouter({
         },
     ],
 })
-export default class router {
-}
+export default router;
