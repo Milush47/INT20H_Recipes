@@ -10,12 +10,7 @@ const router = createRouter({
             path: "/",
             name: "MainPage",
             component: MainPage,
-        },
-        {
-            path: "/profile",
-            name: "Profile",
-            component: Profile,
-        },
+        }
     ],
 })
 export default router;
