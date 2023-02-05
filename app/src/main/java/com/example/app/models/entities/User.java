@@ -25,11 +25,11 @@ public class User implements UserDetails {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "name", nullable = false, length = 32)
-    private String firstName;
+    @Column(name = "firstname", nullable = false, length = 32)
+    private String firstname;
 
-    @Column(name = "surname", nullable = false, length = 32)
-    private String lastName;
+    @Column(name = "lastname", nullable = false, length = 32)
+    private String lastname;
     @Column(name = "email", nullable = false, length = 32)
     private String email;
 
