@@ -20,7 +20,7 @@ public class ProductsForCustomRecipes {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id")
-    private Customrecipe recipe;
+    private CustomRecipes recipe;
 
     @Column(name = "product", length = 32)
     private String product;
