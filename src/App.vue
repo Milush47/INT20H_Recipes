@@ -24,16 +24,3 @@ export default {
 }
 </script>
 
-<style scoped>
-.main{
-  flex: 1 1 auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-.wrap{
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-  width: 80%;
-}
-</style>

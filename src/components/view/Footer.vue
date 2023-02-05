@@ -12,20 +12,21 @@
       </svg>
 
   <div class="foot">
-        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3  border-top container">
-            <div class="col-md-4 d-flex align-items-center">
-                <router-link to="/" class="mb-3 me-2 mb-md-0 text-black text-black text-decoration-none lh-1">
+        <footer class="container foot-cont">
+            <div class="col-md-4">
+                <router-link to="/" class="mb-3 me-2 mb-md-0 text-white text-black text-decoration-none lh-1">
                     <img src="@ast/img/logo.png" alt="Logo" width="30" height="24" class="me-1">
                             Рецепти ♆
                 </router-link>
-                <span class="mb-3 mb-md-0 text-black">&copy; 2023</span>
+                <!-- <span class="mb-3 mb-md-0 text-white">&copy; 2023</span> -->
             </div>
             
-            <ul class="nav list-unstyled d-flex">
-                <li class="ms-3"><a class="text-muted" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li>
-                <li class="ms-3"><a class="text-muted" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
-                <li class="ms-3"><a class="text-muted" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
-            </ul>
+            <!-- <ul class="nav list-unstyled d-flex">
+                <li class="ms-3"><a class="text-white" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li>
+                <li class="ms-3"><a class="text-white" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
+                <li class="ms-3"><a class="text-white" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
+            </ul> -->
+            <span class="mb-3 mb-md-0 text-white">Усі права захищені &copy; 2023</span>
           </footer>
     </div>
 </template>

@@ -113,6 +113,21 @@
             </div>
         </div>
     </section>
+
+    <section class="questions">
+        <div class="container cont5">
+          <h1 class="questions-title">
+              Маєте якісь питання чи побажання? Напишіть нам!
+          </h1>
+          
+          <form class="review-area">
+              <input class="form-control question-form" type="name" placeholder="Ім'я" aria-label="Ім'я">
+              <input class="form-control question-form" type="email" placeholder="Електронна адреса" aria-label="Електронна адреса" required>
+              <input class="form-control question-form question-form-special" type="text" placeholder="Ваш відгук" aria-label="Відгук" required>
+              <button class="btn btn-secondary quest-btn" type="submit">Відправити</button>
+          </form>  
+        </div>
+    </section>
 </template>
 
 <script>
