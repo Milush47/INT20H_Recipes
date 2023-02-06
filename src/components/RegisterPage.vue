@@ -77,7 +77,7 @@ export default {
       email: "",
       password: "",
       password2: "",
-      errors: {},
+      msg: [],
       success: false,
       valid: true,
       message: null,
