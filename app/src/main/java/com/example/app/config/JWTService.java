@@ -5,7 +5,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.apache.catalina.UserDatabase;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +17,7 @@ import java.util.function.Function;
 @Service
 public class JWTService {
     private final String SECRET_KEY = "4A404E635266556A586E327235753878214125442A472D4B6150645367566B59";
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
