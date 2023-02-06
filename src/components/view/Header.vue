@@ -47,9 +47,6 @@
                     <li class="nav-item text-center">
                         <router-link to="/signup" class="btn btn-primary account-button">Зареєструватися</router-link>
                     </li> 
-                    <!-- <li class="nav-item text-center" style="display: none;">
-                        <router-link to="#" class="btn btn-primary account-button">Зареєструватися</router-link>
-                    </li> -->
                 </ul>
             </div>
         </div>
