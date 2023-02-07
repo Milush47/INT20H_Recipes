@@ -449,14 +449,26 @@
   }
 }
 
+@media(max-width: 1600px) {
+  .between {
+    margin-bottom: 5vh !important;
+  }
+}
+
 @media(max-width: 1200px) {
+  .between {
+    display: none;
+  }
+
   .account-button {
     width: 200px;
   }
+
   .search-area {
     margin-top: 2vh !important;
     margin-bottom: 1vh !important;
   }
+
   .showcase{
     background-position: bottom -15vh right 0px;
     background-image: url("./img/2.jpg") !important;
@@ -756,4 +768,10 @@
 
 .questions-title {
   text-align: center;
+}
+
+
+.between {
+  border-top: black solid 0.5px;
+  margin-bottom: 7.5vh;
 }
