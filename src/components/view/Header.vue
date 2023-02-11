@@ -42,7 +42,7 @@
                         </router-link>
                     </li>
                     <li class="nav-item text-center me-sm-2 ms-sm-2">
-                        <router-link to="/login" class="btn btn-outline-light account-button" style="margin-bottom: 2%;">Увійти</router-link>
+                        <router-link to="/auth/authenticate" class="btn btn-outline-light account-button" style="margin-bottom: 2%;">Увійти</router-link>
                     </li>
                     <li class="nav-item text-center">
                         <router-link to="/auth/register" class="btn btn-primary account-button">Зареєструватися</router-link>
