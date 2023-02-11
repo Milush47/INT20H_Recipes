@@ -33,6 +33,9 @@ public class User implements UserDetails {
     @Column(name = "email", nullable = false, length = 32)
     private String email;
 
+    @Column(name = "lastname", nullable = false, length = 256)
+    private String preferences;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
