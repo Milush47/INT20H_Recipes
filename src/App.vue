@@ -2,11 +2,6 @@
   <Header/>
   <RouterView/>
   <Footer/>
-  <!-- <div class="">
-    <Header></Header>
-    <RouterView class="main"/>
-    <Footer class="footer"></Footer>
-  </div> -->
 </template>
 
 <script>

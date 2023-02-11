@@ -18,8 +18,8 @@ export default {
   data: () => ({
     user: "",
     fields: [
-      { name: "firstName", value: "firstName" },
-      { name: "lastName", value: "lastName" },
+      { name: "firstname", value: "firstname" },
+      { name: "lastname", value: "lastname" },
       { name: "email", value: "email" },
     ],
     link: "user",
