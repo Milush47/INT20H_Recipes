@@ -7,6 +7,7 @@ import com.example.app.models.entities.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -19,6 +20,7 @@ public class CatalogController {
     private final CatalogService    catalogService;
     private final RestTemplate      restTemplate = new RestTemplate();
 
+    @GetMapping
     public ResponseEntity<String> getAllRecipes(
             @RequestHeader(value = "Authorization", required = false) String authorization) {
         if (authorization != null && authorization.startsWith("Bearer ")) {
