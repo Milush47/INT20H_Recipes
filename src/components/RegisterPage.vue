@@ -42,6 +42,7 @@
 
 <script>
 import axios from "axios";
+import { createUser } from "@/service/userService";
 export default {
 	data() {
 		return {
@@ -94,7 +95,7 @@ export default {
 						password: this.password,
 						passwordConfirmation: this.passwordConfirmation,
 					});
-					console.log(response.data);
+					await createUser(response.data);
 				} catch (error) {
 					console.error(error);
 				}

@@ -1,8 +1,6 @@
+const axios = require('axios');
+
 export async function createUser(data) {
-    const response = await fetch('http://localhost:8080/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user:data })
-        });
-    return response.json();
+    const response = await axios.post('/auth/register', { user:data });
+    return response.data;
 }
