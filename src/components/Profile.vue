@@ -14,8 +14,17 @@
 
 <script>
 export default {
-  name: "Profile"
-}
+  name: "Profile",
+  data: () => ({
+    user: "",
+    fields: [
+      { name: "firstName", value: "firstName" },
+      { name: "lastName", value: "lastName" },
+      { name: "email", value: "email" },
+    ],
+    link: "user",
+  })
+  }
 </script>
 
 <style scoped>
