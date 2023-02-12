@@ -1,13 +1,10 @@
 package com.example.app.auth;
 
-import com.example.app.validators.password.response.SuccessResponse;
-import com.sun.net.httpserver.Authenticator;
+import com.example.app.validators.response.SuccessResponse;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

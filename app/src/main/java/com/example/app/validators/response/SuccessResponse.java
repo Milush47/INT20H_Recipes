@@ -1,4 +1,4 @@
-package com.example.app.validators.password.response;
+package com.example.app.validators.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

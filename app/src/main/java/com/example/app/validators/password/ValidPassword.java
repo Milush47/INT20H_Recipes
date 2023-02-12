@@ -1,5 +1,6 @@
 package com.example.app.validators.password;
 
+import com.example.app.validators.password.PasswordConstraintValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

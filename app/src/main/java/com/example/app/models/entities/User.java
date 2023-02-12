@@ -1,7 +1,6 @@
 package com.example.app.models.entities;
 
 import com.example.app.models.enums.Role;
-import com.example.app.validators.password.ValidPassword;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +9,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Data
