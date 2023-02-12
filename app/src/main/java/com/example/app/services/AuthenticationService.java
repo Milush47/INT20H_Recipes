@@ -1,4 +1,4 @@
-package com.example.app.auth;
+package com.example.app.services;
 
 import com.example.app.events.OnRegistrationSuccessEvent;
 import com.example.app.services.EmailService;
@@ -6,7 +6,7 @@ import com.example.app.dto.AuthenticationRequest;
 import com.example.app.dto.ResetPasswordRequest;
 import com.example.app.dto.AuthenticationResponse;
 import com.example.app.dto.RegisterRequest;
-import com.example.app.config.JWTService;
+import com.example.app.services.JWTService;
 import com.example.app.models.repositories.UserRepository;
 import com.example.app.models.entities.User;
 import com.example.app.models.enums.Role;

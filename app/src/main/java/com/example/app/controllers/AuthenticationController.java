@@ -1,12 +1,11 @@
-package com.example.app.auth;
+package com.example.app.controllers;
 
 import com.example.app.dto.AuthenticationRequest;
 import com.example.app.dto.ResetPasswordRequest;
 import com.example.app.dto.AuthenticationResponse;
 import com.example.app.dto.RegisterRequest;
-import com.example.app.events.OnRegistrationSuccessEvent;
-import com.example.app.models.repositories.UserRepository;
 import com.example.app.dto.SuccessResponse;
+import com.example.app.services.AuthenticationService;
 import com.example.app.services.EmailService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,7 +1,7 @@
 package com.example.app.controllers;
 
 import com.example.app.services.CatalogService;
-import com.example.app.config.JWTService;
+import com.example.app.services.JWTService;
 import com.example.app.models.repositories.UserRepository;
 import com.example.app.models.entities.User;
 import lombok.RequiredArgsConstructor;

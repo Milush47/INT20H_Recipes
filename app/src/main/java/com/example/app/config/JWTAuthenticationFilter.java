@@ -1,5 +1,6 @@
 package com.example.app.config;
 
+import com.example.app.services.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
