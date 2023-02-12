@@ -20,6 +20,10 @@ public class EmailService {
         mailSender.send(message);
     }
 
+    public void sendRegistrationConfirmation(String to, String subject, String text) {
+
+    }
+
     public boolean isEmailExists(String email) {
         return userRepository.findByEmail(email).isPresent();
     }
