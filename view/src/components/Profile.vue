@@ -4,20 +4,21 @@
     <p>First Name: {{ user.first_name }}</p>
     <p>Last Name: {{ user.last_name }}</p>
     <p>Email: {{ user.email }}</p>
+    <button @click="logout">Logout</button>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-  name: 'Profile',
+  name: "Profile",
   data() {
     return {
       user: {
-        first_name: '',
-        last_name: '',
-        email: '',
+        first_name: "",
+        last_name: "",
+        email: "",
       },
     };
   },
@@ -27,11 +28,15 @@ export default {
   methods: {
     async fetchUser() {
       try {
-        const res = await axios.get('http://localhost:8080/user');
+        const res = await axios.get("http://localhost:8080/user");
         this.user = res.data;
       } catch (err) {
         console.error(err);
       }
+    },
+    logout() {
+      localStorage.removeItem("token");
+      this.$router.push("/auth/authenticate");
     },
   },
 };
