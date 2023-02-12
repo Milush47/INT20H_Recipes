@@ -21,32 +21,32 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-  name: 'CreateRecipe',
+  name: "CreateRecipe",
   data() {
     return {
       recipe: {
-        name: '',
-        ingredients: '',
-        difficulty: 'easy',
+        name: "",
+        ingredients: "",
+        difficulty: "easy",
       },
     };
   },
   methods: {
     async createRecipe() {
       try {
-        await axios.post('http://localhost:8080/recipes', this.recipe);
+        await axios.post("http://localhost:8080/recipes", this.recipe);
         this.recipe = {
-          name: '',
-          ingredients: '',
-          difficulty: 'easy',
+          name: "",
+          ingredients: "",
+          difficulty: "easy",
         };
-        alert('Recipe created successfully!');
+        alert("Recipe created successfully!");
       } catch (err) {
         console.error(err);
-        alert('An error occurred while creating the recipe');
+        alert("An error occurred while creating the recipe");
       }
     },
   },

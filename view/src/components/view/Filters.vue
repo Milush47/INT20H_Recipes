@@ -21,7 +21,8 @@
     <h3>Recipes</h3>
     <ul v-if="recipes.length">
       <li v-for="recipe in recipes">
-        {{ recipe.name }} - {{ recipe.ingredients }} - {{ recipe.prep_time }} - {{ recipe.difficulty }}
+        {{ recipe.name }} - {{ recipe.ingredients }} - {{ recipe.prep_time }} -
+        {{ recipe.difficulty }}
       </li>
     </ul>
     <p v-else>No recipes found</p>
@@ -29,15 +30,15 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
     return {
       filter: {
-        ingredient: '',
-        prep_time: '',
-        difficulty: '',
+        ingredient: "",
+        prep_time: "",
+        difficulty: "",
       },
       recipes: [],
     };
@@ -45,7 +46,7 @@ export default {
   methods: {
     async applyFilter() {
       try {
-        const res = await axios.get('http://localhost:8080/recipes', {
+        const res = await axios.get("http://localhost:8080/recipes", {
           params: this.filter,
         });
         this.recipes = res.data;
