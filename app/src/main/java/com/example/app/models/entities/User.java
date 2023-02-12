@@ -41,10 +41,9 @@ public class User implements UserDetails {
     @Column(name = "role")
     private Role role;
 
-
     private String password;
-//    private Boolean locked;
-//    private Boolean enabled;
+    private Boolean locked;
+    private Boolean enabled;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
