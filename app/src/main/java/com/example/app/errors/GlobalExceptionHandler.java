@@ -19,13 +19,12 @@ public class GlobalExceptionHandler {
             AccessDeniedException ex,
             WebRequest request
     ) {
-        ErrorMessage errorMessage = new ErrorMessage(
+
+        return new ErrorMessage(
                 HttpStatus.BAD_REQUEST.value(),
                 new Date(),
                 ex.getMessage(),
                 request.getDescription(false)
         );
-
-        return errorMessage;
     }
 }

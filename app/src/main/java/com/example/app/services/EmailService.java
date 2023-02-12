@@ -1,6 +1,7 @@
 package com.example.app.services;
 
 import com.example.app.models.repositories.UserRepository;
+import jakarta.mail.SendFailedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -20,12 +21,13 @@ public class EmailService {
         mailSender.send(message);
     }
 
-    public void sendRegistrationConfirmation(String recipient, String subject, String text) {
+    public void sendRegistrationConfirmation(String recipient, String subject, String text){
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
         mailMessage.setTo(recipient);
         mailMessage.setSubject(subject);
         mailMessage.setText(text);
+
 
         mailSender.send(mailMessage);
     }

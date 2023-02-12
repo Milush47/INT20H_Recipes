@@ -4,6 +4,7 @@ import com.example.app.dto.AuthenticationRequest;
 import com.example.app.dto.ResetPasswordRequest;
 import com.example.app.dto.AuthenticationResponse;
 import com.example.app.dto.RegisterRequest;
+import com.example.app.events.OnRegistrationSuccessEvent;
 import com.example.app.models.repositories.UserRepository;
 import com.example.app.dto.SuccessResponse;
 import com.example.app.services.EmailService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 
 import java.nio.file.AccessDeniedException;
 
@@ -30,13 +32,15 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(
-            @Valid @RequestBody RegisterRequest request
+            @Valid @RequestBody RegisterRequest registerRequest, WebRequest request
     ) throws AccessDeniedException {
-        if(!emailService.isEmailExists(request.getEmail())) {
+        if(!emailService.isEmailExists(registerRequest.getEmail())) {
             throw new AccessDeniedException("Email is already taken");
         }
 
-        return ResponseEntity.ok(authService.register(request));
+
+
+        return ResponseEntity.ok(authService.register(registerRequest, request));
     }
 
     @PostMapping("/authenticate")
