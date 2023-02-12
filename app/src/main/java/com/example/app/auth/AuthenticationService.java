@@ -9,6 +9,7 @@ import com.example.app.config.JWTService;
 import com.example.app.models.Repositories.UserRepository;
 import com.example.app.models.entities.User;
 import com.example.app.models.enums.Role;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
