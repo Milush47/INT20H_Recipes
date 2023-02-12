@@ -6,6 +6,7 @@ import com.example.app.dto.AuthenticationResponse;
 import com.example.app.dto.RegisterRequest;
 import com.example.app.models.repositories.UserRepository;
 import com.example.app.dto.SuccessResponse;
+import com.example.app.services.EmailService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -25,13 +26,13 @@ import java.nio.file.AccessDeniedException;
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService authService;
-    private final UserRepository userRepository;
+    private final EmailService emailService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(
             @Valid @RequestBody RegisterRequest request
     ) throws AccessDeniedException {
-        if(userRepository.findByEmail(request.getEmail()).isEmpty()) {
+        if(!emailService.isEmailExists(request.getEmail())) {
             throw new AccessDeniedException("Email is already taken");
         }
 

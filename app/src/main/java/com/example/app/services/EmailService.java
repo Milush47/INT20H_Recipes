@@ -20,8 +20,14 @@ public class EmailService {
         mailSender.send(message);
     }
 
-    public void sendRegistrationConfirmation(String to, String subject, String text) {
+    public void sendRegistrationConfirmation(String recipient, String subject, String text) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
 
+        mailMessage.setTo(recipient);
+        mailMessage.setSubject(subject);
+        mailMessage.setText(text);
+
+        mailSender.send(mailMessage);
     }
 
     public boolean isEmailExists(String email) {
