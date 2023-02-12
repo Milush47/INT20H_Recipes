@@ -1,5 +1,9 @@
 package com.example.app.auth;
 
+import com.example.app.auth.requests.AuthenticationRequest;
+import com.example.app.auth.requests.ResetPasswordRequest;
+import com.example.app.auth.responses.AuthenticationResponse;
+import com.example.app.auth.requests.RegisterRequest;
 import com.example.app.validators.response.SuccessResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService authService;
+
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
@@ -37,5 +42,12 @@ public class AuthenticationController {
         request.getSession().invalidate();
 
         return new ResponseEntity<>(new SuccessResponse(true), HttpStatus.OK);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<AuthenticationResponse> resetPassword(
+            @RequestBody ResetPasswordRequest request
+    ) {
+        return ResponseEntity.ok(authService.resetPassword(request));
     }
 }
