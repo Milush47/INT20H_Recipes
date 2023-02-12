@@ -44,80 +44,91 @@
 import axios from "axios";
 import { createUser } from "@/service/userService";
 export default {
-	data() {
-		return {
-			firstname: "",
-			lastname: "",
-			email: "",
-			password: "",
-			passwordConfirmation: "",
-			errors: {
-				firstname: "",
-				lastname: "",
-				email: "",
-				password: "",
-				passwordConfirmation: "",
-			},
-		};
-	},
-	methods: {
-		async register() {
-			this.clearErrors();
-			if (!this.firstname) {
-				this.errors.firstname = "First name is required";
-			}
-			if (!this.lastname) {
-				this.errors.lastname = "Last name is required";
-			}
-			if (!this.email) {
-				this.errors.email = "Email is required";
-			} else if (!this.validateEmail(this.email)) {
-				this.errors.email = "Email is invalid";
-			}
-			if (!this.password) {
-				this.errors.password = "Password is required";
-			} else if (this.password.length < 6) {
-				this.errors.password = "Password must be at least 6 characters long";
-			}
-			if (!this.passwordConfirmation) {
-				this.errors.passwordConfirmation = "Password confirmation is required";
-			} else if (this.password !== this.passwordConfirmation) {
-				this.errors.passwordConfirmation =
+  data() {
+    return {
+      firstname: "",
+      lastname: "",
+      email: "",
+      password: "",
+      passwordConfirmation: "",
+      errors: {
+        firstname: "",
+        lastname: "",
+        email: "",
+        password: "",
+        passwordConfirmation: "",
+      },
+    };
+  },
+  methods: {
+    async register() {
+      this.clearErrors();
+      if (!this.firstname) {
+        this.errors.firstname = "First name is required";
+      }
+      if (!this.lastname) {
+        this.errors.lastname = "Last name is required";
+      }
+      if (!this.email) {
+        this.errors.email = "Email is required";
+      } else if (!this.validateEmail(this.email)) {
+        this.errors.email = "Email is invalid";
+      }
+      if (!this.password) {
+        this.errors.password = "Password is required";
+      } else if (this.password.length < 8) {
+        this.errors.password = "Password must be at least 8 characters long";
+      } else if (!this.password.match(/[a-z]/)) {
+        this.errors.password = "Password must contain at least one lowercase letter";
+      } else if (!this.password.match(/[A-Z]/)) {
+        this.errors.password = "Password must contain at least one uppercase letter";
+      } else if (!this.password.match(/[0-9]/)) {
+        this.errors.password = "Password must contain at least one number";
+      } else if (!this.password.match(/[!@#$%^&*]/)) {
+        this.errors.password = "Password must contain at least one special character";
+      }
+      if (!this.passwordConfirmation) {
+        this.errors.passwordConfirmation = "Password confirmation is required";
+      } else if (this.password !== this.passwordConfirmation) {
+        this.errors.passwordConfirmation =
           "Password confirmation does not match";
-			}
+      }
 
-			if (!Object.values(this.errors).some((error) => error)) {
-				try {
-					const response = await axios.post("https://localhost:8080/auth/register", {
-						firstName: this.firstname,
-						lastName: this.lastname,
-						email: this.email,
-						password: this.password,
-						passwordConfirmation: this.passwordConfirmation,
-					});
-					await createUser(response.data);
-				} catch (error) {
-					console.error(error);
-				}
+      if (!Object.values(this.errors).some((error) => error)) {
+        try {
+          const response = await axios.post(
+            "https://localhost:8080/auth/register",
+            {
+              firstName: this.firstname,
+              lastName: this.lastname,
+              email: this.email,
+              password: this.password,
+              passwordConfirmation: this.passwordConfirmation,
+            }
+          );
+          await createUser(response.data);
+        } catch (error) {
+          console.error(error);
+        }
 
         this.$router.push("/auth/authenticate");
-			}
-		},
-		clearErrors() {
-			this.errors = {
-				firstname: "",
-				lastname: "",
-				email: "",
-				password: "",
-				passwordConfirmation: "",
-			};
-		},
-		validateEmail(email) {
-			const regex =
+      }
+    },
+    clearErrors() {
+      this.errors = {
+        firstname: "",
+        lastname: "",
+        email: "",
+        password: "",
+        passwordConfirmation: "",
+      };
+    },
+    validateEmail(email) {
+      const regex =
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-			return regex.test(email);
-		},
-	},
+      return regex.test(email);
+    },
+  },
 };
 </script>
 
