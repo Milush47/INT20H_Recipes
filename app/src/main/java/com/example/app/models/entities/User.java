@@ -1,6 +1,7 @@
 package com.example.app.models.entities;
 
 import com.example.app.models.enums.Role;
+import com.example.app.validators.password.ValidPassword;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,9 +41,10 @@ public class User implements UserDetails {
     @Column(name = "role")
     private Role role;
 
+
     private String password;
-    private Boolean locked;
-    private Boolean enabled;
+//    private Boolean locked;
+//    private Boolean enabled;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

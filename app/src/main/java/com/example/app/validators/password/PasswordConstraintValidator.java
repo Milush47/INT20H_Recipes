@@ -1,13 +1,11 @@
 package com.example.app.validators.password;
 
+import com.google.common.base.Joiner;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.passay.*;
 
-import java.lang.annotation.Annotation;
 import java.util.Arrays;
-import java.util.EmptyStackException;
-import java.util.StringJoiner;
 
 public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
 
@@ -32,12 +30,10 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
         }
 
         context.disableDefaultConstraintViolation();
-//        context.buildConstraintViolationWithTemplate(
-//                Joiner.on
-//        )
+        context.buildConstraintViolationWithTemplate(
+                Joiner.on(",").join(validator.getMessages(result)))
+                .addConstraintViolation();
 
         return false;
     }
-
-
 }
