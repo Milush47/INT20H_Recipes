@@ -19,7 +19,7 @@ public class RegistrationEmailListener implements ApplicationListener<OnRegistra
 
     @Override
     public void onApplicationEvent(OnRegistrationSuccessEvent event) {
-
+        this.confirmRegistration(event);
     }
 
     private void confirmRegistration(OnRegistrationSuccessEvent event) {
