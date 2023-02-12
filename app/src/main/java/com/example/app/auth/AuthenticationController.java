@@ -1,11 +1,11 @@
 package com.example.app.auth;
 
-import com.example.app.auth.requests.AuthenticationRequest;
-import com.example.app.auth.requests.ResetPasswordRequest;
-import com.example.app.auth.responses.AuthenticationResponse;
-import com.example.app.auth.requests.RegisterRequest;
-import com.example.app.models.Repositories.UserRepository;
-import com.example.app.validators.response.SuccessResponse;
+import com.example.app.dto.AuthenticationRequest;
+import com.example.app.dto.ResetPasswordRequest;
+import com.example.app.dto.AuthenticationResponse;
+import com.example.app.dto.RegisterRequest;
+import com.example.app.models.repositories.UserRepository;
+import com.example.app.dto.SuccessResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;

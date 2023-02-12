@@ -1,4 +1,4 @@
-package com.example.app.validators.response;
+package com.example.app.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

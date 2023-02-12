@@ -37,6 +37,8 @@ public class User implements UserDetails {
     @Column(name = "lastname", nullable = false, length = 256)
     private String preferences;
 
+    private boolean confirmed;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;

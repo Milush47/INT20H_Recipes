@@ -1,4 +1,4 @@
-package com.example.app.auth.requests;
+package com.example.app.dto;
 
 import com.example.app.validators.password.ValidPassword;
 import jakarta.validation.constraints.Email;

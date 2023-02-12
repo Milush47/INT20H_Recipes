@@ -1,6 +1,6 @@
-package com.example.app.Services;
+package com.example.app.services;
 
-import com.example.app.models.Repositories.UserRepository;
+import com.example.app.models.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

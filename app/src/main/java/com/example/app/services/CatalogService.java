@@ -1,11 +1,6 @@
-package com.example.app.Services;
+package com.example.app.services;
 
-import com.example.app.config.JWTService;
-import com.example.app.models.Repositories.UserRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 
 @Service

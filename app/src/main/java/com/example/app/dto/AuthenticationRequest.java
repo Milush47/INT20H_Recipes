@@ -1,4 +1,4 @@
-package com.example.app.auth.requests;
+package com.example.app.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

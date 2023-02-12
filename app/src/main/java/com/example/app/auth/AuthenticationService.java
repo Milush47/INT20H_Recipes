@@ -1,15 +1,14 @@
 package com.example.app.auth;
 
-import com.example.app.Services.EmailService;
-import com.example.app.auth.requests.AuthenticationRequest;
-import com.example.app.auth.requests.ResetPasswordRequest;
-import com.example.app.auth.responses.AuthenticationResponse;
-import com.example.app.auth.requests.RegisterRequest;
+import com.example.app.services.EmailService;
+import com.example.app.dto.AuthenticationRequest;
+import com.example.app.dto.ResetPasswordRequest;
+import com.example.app.dto.AuthenticationResponse;
+import com.example.app.dto.RegisterRequest;
 import com.example.app.config.JWTService;
-import com.example.app.models.Repositories.UserRepository;
+import com.example.app.models.repositories.UserRepository;
 import com.example.app.models.entities.User;
 import com.example.app.models.enums.Role;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
