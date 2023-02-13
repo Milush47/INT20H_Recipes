@@ -21,45 +21,59 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.nio.file.AccessDeniedException;
 
-
+/*
+    AuthController is made for mapping following paths:
+        - auth/register         (POST)
+        - auth/authenticate     (POST)
+        - auth/logout           (POST)
+        - auth/reset-password   (POST)
+    It is responsible for all actions with User on web side
+ */
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
+    // Autowired variables using constructor
     private final AuthenticationService authService;
-    private final EmailService emailService;
+    private final EmailService          emailService;
 
+    // responsible for registration new user.
     @PostMapping("/register")
     public ResponseEntity<?> register(
-            @Valid @RequestBody RegisterRequest registerRequest, WebRequest request
+            @Valid @RequestBody RegisterRequest registerRequest,
+            WebRequest request
     ) throws AccessDeniedException {
+
         if(!emailService.isEmailExists(registerRequest.getEmail())) {
             throw new AccessDeniedException("Email is already taken");
         }
-
-
-
         return ResponseEntity.ok(authService.register(registerRequest, request));
     }
 
+    // responsible for authentication user (by jwt)
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> register(
+    public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request
     ) {
         return ResponseEntity.ok(authService.authenticate(request));
     }
 
+    // responsible for log outing user
     @PostMapping("/logout")
     public ResponseEntity<SuccessResponse> logout(HttpServletRequest request) throws ServletException {
         request.logout();
         request.getSession().invalidate();
 
-        return new ResponseEntity<>(new SuccessResponse(true), HttpStatus.OK);
+        return new ResponseEntity<>(
+                new SuccessResponse(true, "User was logged out"),
+                HttpStatus.OK
+        );
     }
 
+    // responsible for reset user's password (new password is provided by user)
     @PostMapping("/reset-password")
     public ResponseEntity<AuthenticationResponse> resetPassword(
-            @RequestBody ResetPasswordRequest request
+            @Valid @RequestBody ResetPasswordRequest request
     ) {
         return ResponseEntity.ok(authService.resetPassword(request));
     }

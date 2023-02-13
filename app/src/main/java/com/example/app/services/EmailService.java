@@ -13,21 +13,13 @@ public class EmailService {
     private final JavaMailSender mailSender;
     private final UserRepository userRepository;
 
-    public void sendPasswordResetEmail(String email, String password) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject("Password Reset");
-        message.setText("Your new password is: " + password);
-        mailSender.send(message);
-    }
-
+    // Method is used for verification email on registration step
     public void sendRegistrationConfirmation(String recipient, String subject, String text){
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
         mailMessage.setTo(recipient);
         mailMessage.setSubject(subject);
         mailMessage.setText(text);
-
 
         mailSender.send(mailMessage);
     }

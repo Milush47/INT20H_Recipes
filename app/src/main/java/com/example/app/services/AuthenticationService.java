@@ -22,14 +22,17 @@ import org.springframework.web.context.request.WebRequest;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JWTService jwtService;
-    private final AuthenticationManager authManager;
-    private final EmailService emailService;
-    private ApplicationEventPublisher eventPublisher;
+    private final   UserRepository              userRepository;
+    private final   PasswordEncoder             passwordEncoder;
+    private final   JWTService                  jwtService;
+    private final   AuthenticationManager       authManager;
+    private final   EmailService                emailService;
+    private         ApplicationEventPublisher   eventPublisher;
 
-    public AuthenticationResponse register(RegisterRequest registerRequest, WebRequest request) {
+    public AuthenticationResponse register(
+            RegisterRequest registerRequest,
+            WebRequest request
+    ) {
         var user = User.builder()
                 .firstname(registerRequest.getFirstname())
                 .lastname(registerRequest.getLastname())
@@ -70,12 +73,10 @@ public class AuthenticationService {
 
     public AuthenticationResponse resetPassword(ResetPasswordRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User Bot Found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
 
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
-
-        emailService.sendPasswordResetEmail(user.getEmail(), user.getPassword());
 
         var jwtToken = jwtService.generateToken(user);
 
