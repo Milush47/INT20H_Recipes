@@ -65,7 +65,7 @@ public class AuthenticationController {
         request.getSession().invalidate();
 
         return new ResponseEntity<>(
-                new SuccessResponse(true, "User was logged out"),
+                new SuccessResponse( "User was logged out", true),
                 HttpStatus.OK
         );
     }
