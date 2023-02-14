@@ -16,6 +16,7 @@
         <label for="email">Email:</label>
         <input type="email" id="email" v-model="email" />
         <p v-if="errors.email" class="error">{{ errors.email }}</p>
+        <p v-if="emailInUse" class="error-message">Email is already in use.</p>
       </div>
       <div class="form-group">
         <label for="password">Password:</label>
@@ -51,6 +52,7 @@ export default {
       email: "",
       password: "",
       passwordConfirmation: "",
+      emailInUse: false,
       errors: {
         firstname: "",
         lastname: "",
@@ -113,6 +115,16 @@ export default {
 
         this.$router.push("/auth/authenticate");
       }
+
+      axios.post("https://localhost:8080/auth/register", data)
+          .then(response => {
+            console.log(response);
+          })
+          .catch(error => {
+            if (error.response.status === 409 ) {
+              this.emailInUse = true;
+            }
+          })
     },
     clearErrors() {
       this.errors = {

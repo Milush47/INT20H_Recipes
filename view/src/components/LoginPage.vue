@@ -45,9 +45,11 @@ export default {
   },
   methods: {
     validateEmail(value) {
-      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
+      const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+      if (regex.test(value)) {
         this.msg["email"] = "";
-      } else {
+      } else if (!regex.test(value)) {
         this.msg["email"] = "Неправильна поштова скринька";
       }
     },
@@ -69,6 +71,7 @@ export default {
       this.validatePassword();
     },
   },
+
 };
 </script>
 
