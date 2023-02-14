@@ -16,13 +16,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@FieldMatch.List(
-        @FieldMatch(
-                first   = "password",
-                second  = "confirmedPassword",
-                message = "The password fields must match"
-        )
-)
 public class AuthenticationRequest {
     @Email
     @NotBlank
@@ -30,6 +23,4 @@ public class AuthenticationRequest {
     @ValidPassword
     @NotBlank
     private String password;
-    @NotBlank
-    private String confirmedPassword;
 }

@@ -1,5 +1,6 @@
 package com.example.app.dto;
 
+import com.example.app.validators.fieldMatch.FieldMatch;
 import com.example.app.validators.password.ValidPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -15,6 +16,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@FieldMatch.List(
+        @FieldMatch(
+                first   = "password",
+                second  = "confirmedPassword",
+                message = "The password fields must match"
+        )
+)
 public class RegisterRequest {
     @NotBlank
     private String firstname;
@@ -26,5 +34,6 @@ public class RegisterRequest {
     @ValidPassword
     @NotBlank
     private String password;
-
+    @NotBlank
+    private String confirmedPassword;
 }

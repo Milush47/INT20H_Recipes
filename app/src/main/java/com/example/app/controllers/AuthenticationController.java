@@ -44,9 +44,9 @@ public class AuthenticationController {
     // responsible for registration new user.
     @PostMapping("/register")
     public ResponseEntity<SuccessResponse> register(
-            @Valid @RequestBody RegisterRequest registerRequest,
+            @RequestBody RegisterRequest registerRequest,
             WebRequest request
-    ) throws AccessDeniedException {
+    ) {
 
         String email = registerRequest.getEmail();
 
