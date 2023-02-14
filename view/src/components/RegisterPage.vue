@@ -5,23 +5,23 @@
       <div class="form-group">
         <label for="firstName">First Name:</label>
         <input type="text" id="firstName" v-model="firstname" />
-        <p v-if="errors.firstname" class="error">{{ errors.firstname }}</p>
+        <p oninput="validateFirstName()" v-if="errors.firstname" class="error">{{ errors.firstname }}</p>
       </div>
       <div class="form-group">
         <label for="lastName">Last Name:</label>
         <input type="text" id="lastName" v-model="lastname" />
-        <p v-if="errors.lastname" class="error">{{ errors.lastname }}</p>
+        <p oninput="validateLastName()" v-if="errors.lastname" class="error">{{ errors.lastname }}</p>
       </div>
       <div class="form-group">
         <label for="email">Email:</label>
         <input type="email" id="email" v-model="email" />
         <p v-if="errors.email" class="error">{{ errors.email }}</p>
-        <p v-if="emailInUse" class="error-message">Email is already in use.</p>
+        <p oninput="validateEmailForm()" v-if="emailInUse" class="error-message">Email is already in use.</p>
       </div>
       <div class="form-group">
         <label for="password">Password:</label>
         <input type="password" id="password" v-model="password" />
-        <p v-if="errors.password" class="error">{{ errors.password }}</p>
+        <p oninput="validatePassword()" v-if="errors.password" class="error">{{ errors.password }}</p>
       </div>
       <div class="form-group">
         <label for="passwordConfirmation">Confirm Password:</label>
@@ -30,7 +30,7 @@
           id="passwordConfirmation"
           v-model="passwordConfirmation"
         />
-        <p v-if="errors.passwordConfirmation" class="error">
+        <p oninput="validatePasswordConfirm()" v-if="errors.passwordConfirmation" class="error">
           {{ errors.passwordConfirmation }}
         </p>
       </div>
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import { axios } from "axios";
 import { createUser } from "@/service/userService";
 export default {
   data() {
@@ -65,36 +65,37 @@ export default {
   methods: {
     async register() {
       this.clearErrors();
-      if (!this.firstname) {
-        this.errors.firstname = "First name is required";
-      }
-      if (!this.lastname) {
-        this.errors.lastname = "Last name is required";
-      }
-      if (!this.email) {
-        this.errors.email = "Email is required";
-      } else if (!this.validateEmail(this.email)) {
-        this.errors.email = "Email is invalid";
-      }
-      if (!this.password) {
-        this.errors.password = "Password is required";
-      } else if (this.password.length < 8) {
-        this.errors.password = "Password must be at least 8 characters long";
-      } else if (!this.password.match(/[a-z]/)) {
-        this.errors.password = "Password must contain at least one lowercase letter";
-      } else if (!this.password.match(/[A-Z]/)) {
-        this.errors.password = "Password must contain at least one uppercase letter";
-      } else if (!this.password.match(/[0-9]/)) {
-        this.errors.password = "Password must contain at least one number";
-      } else if (!this.password.match(/[!@#$%^&*]/)) {
-        this.errors.password = "Password must contain at least one special character";
-      }
-      if (!this.passwordConfirmation) {
-        this.errors.passwordConfirmation = "Password confirmation is required";
-      } else if (this.password !== this.passwordConfirmation) {
-        this.errors.passwordConfirmation =
-          "Password confirmation does not match";
-      }
+
+      // if (!this.firstname) {
+      //   this.errors.firstname = "First name is required";
+      // }
+      // if (!this.lastname) {
+      //   this.errors.lastname = "Last name is required";
+      // }
+      // if (!this.email) {
+      //   this.errors.email = "Email is required";
+      // } else if (!this.validateEmail(this.email)) {
+      //   this.errors.email = "Email is invalid";
+      // }
+      // if (!this.password) {
+      //   this.errors.password = "Password is required";
+      // } else if (this.password.length < 8) {
+      //   this.errors.password = "Password must be at least 8 characters long";
+      // } else if (!this.password.match(/[a-z]/)) {
+      //   this.errors.password = "Password must contain at least one lowercase letter";
+      // } else if (!this.password.match(/[A-Z]/)) {
+      //   this.errors.password = "Password must contain at least one uppercase letter";
+      // } else if (!this.password.match(/[0-9]/)) {
+      //   this.errors.password = "Password must contain at least one number";
+      // } else if (!this.password.match(/[!@#$%^&*]/)) {
+      //   this.errors.password = "Password must contain at least one special character";
+      // }
+      // if (!this.passwordConfirmation) {
+      //   this.errors.passwordConfirmation = "Password confirmation is required";
+      // } else if (this.password !== this.passwordConfirmation) {
+      //   this.errors.passwordConfirmation =
+      //     "Password confirmation does not match";
+      // }
 
       if (!Object.values(this.errors).some((error) => error)) {
         try {
@@ -140,8 +141,49 @@ export default {
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return regex.test(email);
     },
+
+  validateFirstName() {
+    if (!this.firstname) {
+      this.errors.firstname = "First name is required";
+    }
   },
-};
+  validateLastName() {
+    if (!this.lastname) {
+      this.errors.lastname = "Last name is required";
+    }
+  },
+  validateEmailForm() {
+    if (!this.email) {
+      this.errors.email = "Email is required";
+    } else if (!this.validateEmail(this.email)) {
+      this.errors.email = "Email is invalid";
+    }
+  },
+  validatePassword() {
+    if (!this.password) {
+      this.errors.password = "Password is required";
+    } else if (this.password.length < 8) {
+      this.errors.password = "Password must be at least 8 characters long";
+    } else if (!this.password.match(/[a-z]/)) {
+      this.errors.password = "Password must contain at least one lowercase letter";
+    } else if (!this.password.match(/[A-Z]/)) {
+      this.errors.password = "Password must contain at least one uppercase letter";
+    } else if (!this.password.match(/[0-9]/)) {
+      this.errors.password = "Password must contain at least one number";
+    } else if (!this.password.match(/[!@#$%^&*]/)) {
+      this.errors.password = "Password must contain at least one special character";
+    }
+  },
+  validatePasswordConfirm() {
+    if (!this.passwordConfirmation) {
+      this.errors.passwordConfirmation = "Password confirmation is required";
+    } else if (this.password !== this.passwordConfirmation) {
+      this.errors.passwordConfirmation =
+        "Password confirmation does not match";
+    }
+  },
+  },
+  };
 </script>
 
 <style>
