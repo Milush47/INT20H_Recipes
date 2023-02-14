@@ -1,5 +1,6 @@
 package com.example.app.services;
 
+import com.example.app.errors.ExceptionMessage;
 import com.example.app.events.OnRegistrationSuccessEvent;
 import com.example.app.services.EmailService;
 import com.example.app.dto.AuthenticationRequest;
@@ -61,8 +62,14 @@ public class AuthenticationService {
                 )
         );
 
+
+
         var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow();
+                .orElseThrow(
+                        () -> new UsernameNotFoundException(
+                                String.format(ExceptionMessage.USER_NOT_FOUND, request.getEmail())
+                        )
+                );
 
         var jwtToken = jwtService.generateToken(user);
 
@@ -72,8 +79,19 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse resetPassword(ResetPasswordRequest request) {
+        authManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getNewPassword()
+                )
+        );
+
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
+                .orElseThrow(
+                        () -> new UsernameNotFoundException(
+                                String.format(ExceptionMessage.USER_NOT_FOUND, request.getEmail())
+                        )
+                );
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);

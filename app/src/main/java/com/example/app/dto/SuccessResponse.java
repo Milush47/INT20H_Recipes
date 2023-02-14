@@ -1,6 +1,7 @@
 package com.example.app.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.management.ConstructorParameters;
@@ -9,6 +10,7 @@ import javax.management.ConstructorParameters;
     SuccessResponse is used for sending responses to frontend with piece of information
  */
 @Data
+@Builder
 @AllArgsConstructor
 public class SuccessResponse {
     private String  message;

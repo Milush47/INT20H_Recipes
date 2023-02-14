@@ -5,6 +5,7 @@ import com.example.app.dto.ResetPasswordRequest;
 import com.example.app.dto.AuthenticationResponse;
 import com.example.app.dto.RegisterRequest;
 import com.example.app.dto.SuccessResponse;
+import com.example.app.errors.ExceptionMessage;
 import com.example.app.services.AuthenticationService;
 import com.example.app.services.EmailService;
 import jakarta.servlet.ServletException;
@@ -39,23 +40,41 @@ public class AuthenticationController {
 
     // responsible for registration new user.
     @PostMapping("/register")
-    public ResponseEntity<?> register(
+    public ResponseEntity<SuccessResponse> register(
             @Valid @RequestBody RegisterRequest registerRequest,
             WebRequest request
     ) throws AccessDeniedException {
 
-        if(!emailService.isEmailExists(registerRequest.getEmail())) {
-            throw new AccessDeniedException("Email is already taken");
+        String email = registerRequest.getEmail();
+
+        if(!emailService.isEmailExists(email)) {
+            throw new AccessDeniedException(
+                    String.format(ExceptionMessage.EMAIl_IS_TAKEN, email)
+            );
         }
-        return ResponseEntity.ok(authService.register(registerRequest, request));
+
+        return ResponseEntity.ok(
+                SuccessResponse.builder()
+                        .message("User is registered")
+                        .success(true)
+                        .data(authService.register(registerRequest, request))
+                        .build()
+        );
     }
 
     // responsible for authentication user (by jwt)
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(
-            @RequestBody AuthenticationRequest request
+    public ResponseEntity<SuccessResponse> authenticate(
+            @Valid @RequestBody AuthenticationRequest request
     ) {
-        return ResponseEntity.ok(authService.authenticate(request));
+
+        return ResponseEntity.ok(
+                SuccessResponse.builder()
+                        .message("User is authenticated")
+                        .success(true)
+                        .data(authService.authenticate(request))
+                        .build()
+        );
     }
 
     // responsible for log outing user
@@ -64,17 +83,26 @@ public class AuthenticationController {
         request.logout();
         request.getSession().invalidate();
 
-        return new ResponseEntity<>(
-                new SuccessResponse( "User was logged out", true),
-                HttpStatus.OK
+        return ResponseEntity.ok(
+                SuccessResponse.builder()
+                        .message("User is logged out")
+                        .success(true)
+                        .build()
         );
     }
 
     // responsible for reset user's password (new password is provided by user)
     @PostMapping("/reset-password")
-    public ResponseEntity<AuthenticationResponse> resetPassword(
+    public ResponseEntity<SuccessResponse> resetPassword(
             @Valid @RequestBody ResetPasswordRequest request
     ) {
-        return ResponseEntity.ok(authService.resetPassword(request));
+
+        return ResponseEntity.ok(
+                SuccessResponse.builder()
+                        .message("Password is reset")
+                        .success(true)
+                        .data(authService.resetPassword(request))
+                        .build()
+        );
     }
 }

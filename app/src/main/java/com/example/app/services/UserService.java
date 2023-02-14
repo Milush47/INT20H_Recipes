@@ -1,5 +1,6 @@
 package com.example.app.services;
 
+import com.example.app.errors.ExceptionMessage;
 import com.example.app.models.entities.User;
 import com.example.app.models.entities.VerificationToken;
 import com.example.app.models.repositories.UserRepository;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService implements UserDetailsService {
 
-    private final static    String                      USER_NOT_FOUND_MSG = "user with %s email not found";
     private final           UserRepository              userRepository;
     private final           VerificationTokenRepository verificationTokenRepository;
 
@@ -22,7 +22,8 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email)
                 .orElseThrow(
-                        () -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email))
+                        () -> new UsernameNotFoundException(
+                                String.format(ExceptionMessage.USER_NOT_FOUND, email))
                 );
     }
 
