@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.file.AccessDeniedException;
+
+import static com.example.app.errors.ExceptionMessage.EMAIl_IS_TAKEN;
 
 /*
     AuthController is made for mapping following paths:
@@ -48,8 +51,9 @@ public class AuthenticationController {
         String email = registerRequest.getEmail();
 
         if(!emailService.isEmailExists(email)) {
-            throw new AccessDeniedException(
-                    String.format(ExceptionMessage.EMAIl_IS_TAKEN, email)
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    EMAIl_IS_TAKEN
             );
         }
 
