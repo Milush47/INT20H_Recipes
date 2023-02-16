@@ -13,7 +13,7 @@
             required
             v-model="email"
           />
-          <span v-if="msg.email">{{ msg.email }}</span>
+          <span oninput="validateEmail(email)" v-if="msg.email">{{ msg.email }}</span>
         </div>
         <div class="form-group">
           <label for="password">Пароль</label>
@@ -25,7 +25,7 @@
             required
             v-model="password"
           />
-          <span v-if="msg.password">{{ msg.password }}</span>
+          <span oninput="validatePassword(password)" v-if="msg.password">{{ msg.password }}</span>
         </div>
         <button type="submit" class="btn btn-primary">Увійти</button>
       </form>

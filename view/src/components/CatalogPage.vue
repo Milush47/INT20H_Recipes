@@ -1,5 +1,5 @@
 <template>
-  <section class="recipes">
+  <section onload="getAllRecipes" class="recipes">
     <div class="container">
       <h1 class="title">Каталог рецептів</h1>
 
@@ -106,10 +106,18 @@
 
 <script>
 import Filter from "./view/Filters.vue";
+import axios from "axios";
+import { getRecipes } from "@/service/recipesService";
 export default {
   name: "CatalogPage",
   components: {
     Filter,
+  },
+  methods: {
+    getAllRecipes() {
+      getRecipes();
+      console.log(getRecipes());
+    }
   },
 };
 </script>

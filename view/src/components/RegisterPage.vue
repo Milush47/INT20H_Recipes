@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { axios } from "axios";
+import axios from "axios";
 import { createUser } from "@/service/userService";
 export default {
   data() {
@@ -97,27 +97,26 @@ export default {
       //     "Password confirmation does not match";
       // }
 
+      const url = "http://localhost:8080/auth/register";
+      const body = {
+        firstname: this.firstname,
+        lastname: this.lastname,
+        email: this.email,
+        password: this.password,
+        confirmedPassword: this.passwordConfirmation,
+      };
+
       if (!Object.values(this.errors).some((error) => error)) {
         try {
-          const response = await axios.post(
-            "https://localhost:8080/auth/register",
-            {
-              firstName: this.firstname,
-              lastName: this.lastname,
-              email: this.email,
-              password: this.password,
-              passwordConfirmation: this.passwordConfirmation,
-            }
-          );
+          const response = await axios.post(url, body);
           await createUser(response.data);
         } catch (error) {
           console.error(error);
         }
-
-        this.$router.push("/auth/authenticate");
       }
+      this.$router.push("/auth/authenticate");
 
-      axios.post("https://localhost:8080/auth/register", data)
+      axios.post(url, body)
           .then(response => {
             console.log(response);
           })

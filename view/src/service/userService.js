@@ -1,7 +1,9 @@
 import axios from "axios";
 
 export async function createUser(data) {
-    const response = await axios.post('/auth/register', { user:data });
+    const url = '/auth/register';
+    const body = { user:data };
+    const response = await axios.post(url, body);
     return response.data;
 }
 
