@@ -34,7 +34,7 @@ public class User implements UserDetails {
     @Column(name = "email", nullable = false, unique = true , length = 32)
     private String email;
 
-    @Column(name = "preferences", nullable = false, length = 256)
+    @Column(name = "preferences", length = 256)
     private String preferences;
 
     private boolean confirmed;
@@ -43,8 +43,13 @@ public class User implements UserDetails {
     @Column(name = "role")
     private Role role;
 
+    @Column(name = "password", nullable = false, length = 128)
     private String password;
+
+    @Column(name = "locked")
     private Boolean locked;
+
+    @Column(name = "enabled")
     private Boolean enabled;
 
     @Override

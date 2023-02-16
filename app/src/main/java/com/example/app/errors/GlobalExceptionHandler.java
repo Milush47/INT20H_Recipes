@@ -6,11 +6,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.nio.file.AccessDeniedException;
 import java.util.Date;
 
 @RestControllerAdvice
@@ -19,8 +17,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResponseStatusException.class)
     @ResponseStatus(value = HttpStatus.CONFLICT)
     public ErrorMessage handleResponseStatusException(
-            ResponseStatusException   ex,
-            WebRequest              request
+            ResponseStatusException     ex,
+            WebRequest                  request
     ) {
 
         return ErrorMessage.builder()

@@ -50,7 +50,7 @@ public class AuthenticationController {
 
         String email = registerRequest.getEmail();
 
-        if(!emailService.isEmailExists(email)) {
+        if(emailService.isEmailExists(email)) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
                     EMAIl_IS_TAKEN

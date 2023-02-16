@@ -22,7 +22,7 @@ public class VerificationToken {
     @Column(name="token")
     private String token;
 
-    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @OneToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -32,22 +32,22 @@ public class VerificationToken {
     @Column(name="expiry_date")
     private Date expiryDate;
 
-    public VerificationToken(final String token, final User user) {
+    public VerificationToken( String token,  User user) {
         super();
         Calendar calendar = Calendar.getInstance();
 
-        this.token = token;
-        this.user = user;
-        this.createdDate = new Date(calendar.getTime().getTime());
-        this.expiryDate = calculateExpiryDate(EXPIRATION);
+        this.token          = token;
+        this.user           = user;
+        this.createdDate    = new Date(calendar.getTime().getTime());
+        this.expiryDate     = calculateExpiryDate();
     }
 
-    private Date calculateExpiryDate(int expiryTimeInMinutes) {
+    private Date calculateExpiryDate() {
         Calendar calendar = Calendar.getInstance();
 
         calendar.setTime(new Timestamp(calendar.getTime().getTime()));
 
-        calendar.add(Calendar.MINUTE, expiryTimeInMinutes);
+        calendar.add(Calendar.MINUTE, VerificationToken.EXPIRATION);
 
         return new Date(calendar.getTime().getTime());
     }

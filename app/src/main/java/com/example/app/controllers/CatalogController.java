@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,7 +22,8 @@ import org.springframework.web.client.RestTemplate;
     If user isn't authenticated recipes will be shown randomly
  */
 @RequiredArgsConstructor
-@RestController("/catalog")
+@RestController
+@RequestMapping("/catalog")
 public class CatalogController {
     // Autowired variables by constructor
     private final UserRepository    userRepository;

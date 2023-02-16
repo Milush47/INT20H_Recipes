@@ -11,6 +11,7 @@ import com.example.app.services.JWTService;
 import com.example.app.models.repositories.UserRepository;
 import com.example.app.models.entities.User;
 import com.example.app.models.enums.Role;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequest;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class AuthenticationService {
     private final   UserRepository              userRepository;
     private final   PasswordEncoder             passwordEncoder;
@@ -42,10 +43,10 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .build();
 
-        String appUrl = request.getContextPath();
-        eventPublisher.publishEvent(new OnRegistrationSuccessEvent(user, request.getLocale(),appUrl));
-
         userRepository.save(user);
+
+        String appUrl = request.getContextPath();
+        eventPublisher.publishEvent(new OnRegistrationSuccessEvent(user, request.getLocale(), appUrl));
 
         var jwtToken = jwtService.generateToken(user);
 

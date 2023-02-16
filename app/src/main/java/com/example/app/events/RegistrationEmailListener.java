@@ -32,6 +32,8 @@ public class RegistrationEmailListener implements ApplicationListener<OnRegistra
         String subject      = "Registration confirmation";
         String url          = event.getAppUrl() + "/confirmRegistration?token=" + token;
 
+        System.out.println(event.getLocale());
+
         String message = messageSource.getMessage(
                 "message.registrationSuccessConfirmationLink",
                 null,
