@@ -1,26 +1,26 @@
 <template>
   <div class="registration-container">
     <h1>Sign Up</h1>
-    <form method="post">
+    <form @submit.prevent="register" method="post">
       <div class="form-group">
         <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" v-model="firstname" />
+        <input type="text" id="firstName" v-model="registerRequest.firstname" />
         <p oninput="validateFirstName()" v-if="errors.firstname" class="error">{{ errors.firstname }}</p>
       </div>
       <div class="form-group">
         <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" v-model="lastname" />
+        <input type="text" id="lastName" v-model="registerRequest.lastname" />
         <p oninput="validateLastName()" v-if="errors.lastname" class="error">{{ errors.lastname }}</p>
       </div>
       <div class="form-group">
         <label for="email">Email:</label>
-        <input type="email" id="email" v-model="email" />
+        <input type="email" id="email" v-model="registerRequest.email" />
         <p v-if="errors.email" class="error">{{ errors.email }}</p>
         <p oninput="validateEmailForm()" v-if="emailInUse" class="error-message">Email is already in use.</p>
       </div>
       <div class="form-group">
         <label for="password">Password:</label>
-        <input type="password" id="password" v-model="password" />
+        <input type="password" id="password" v-model="registerRequest.password" />
         <p oninput="validatePassword()" v-if="errors.password" class="error">{{ errors.password }}</p>
       </div>
       <div class="form-group">
@@ -28,9 +28,9 @@
         <input
           type="password"
           id="passwordConfirmation"
-          v-model="passwordConfirmation"
+          v-model="registerRequest.confirmedPassword"
         />
-        <p oninput="validatePasswordConfirm()" v-if="errors.passwordConfirmation" class="error">
+        <p oninput="validatePasswordConfirm()" v-if="errors.confirmedPassword" class="error">
           {{ errors.passwordConfirmation }}
         </p>
       </div>
@@ -44,21 +44,25 @@
 <script>
 import axios from "axios";
 import { createUser } from "@/service/userService";
+import RegistrationService from "./service.js";
+
 export default {
   data() {
     return {
-      firstname: "",
-      lastname: "",
-      email: "",
-      password: "",
-      passwordConfirmation: "",
+      registerRequest: {
+        firstname: "",
+        lastname: "",
+        email: "",
+        password: "",
+        confirmedPassword: "",
+      },
       emailInUse: false,
       errors: {
         firstname: "",
         lastname: "",
         email: "",
         password: "",
-        passwordConfirmation: "",
+        confirmedPassword: "",
       },
     };
   },
@@ -97,34 +101,59 @@ export default {
       //     "Password confirmation does not match";
       // }
 
-      const url = "http://localhost:8080/auth/register";
-      const body = {
-        firstname: this.firstname,
-        lastname: this.lastname,
-        email: this.email,
-        password: this.password,
-        confirmedPassword: this.passwordConfirmation,
-      };
+      // const url = "http://localhost:8080/auth/register";
+      // const body = {
+      //   firstname: this.registerRequest.firstname,
+      //   lastname: this.registerRequest.lastname,
+      //   email: this.registerRequest.email,
+      //   password: this.registerRequest.password,
+      //   confirmedPassword: this.registerRequest.confirmedPassword,
+      // };
 
-      if (!Object.values(this.errors).some((error) => error)) {
-        try {
-          const response = await axios.post(url, body);
-          await createUser(response.data);
-        } catch (error) {
-          console.error(error);
-        }
+      try {
+        const response = await RegistrationService.register(
+            this.firstname,
+            this.lastname,
+            this.email,
+            this.password,
+            this.confirmedPassword
+        )
+        // Do something with the successful response, e.g. redirect the user
+      } catch (error) {
+        // Handle the error, e.g. display an error message
+        console.error(error)
       }
-      this.$router.push("/auth/authenticate");
 
-      axios.post(url, body)
-          .then(response => {
-            console.log(response);
-          })
-          .catch(error => {
-            if (error.response.status === 409 ) {
-              this.emailInUse = true;
-            }
-          })
+      // RegistrationService.register(this.registerRequest)
+      //   .then((response) => {
+      //     console.log(response);
+      //   })
+      //   .catch((error) => {
+      //     if (error.response.status === 409) {
+      //       this.emailInUse = true;
+      //     }
+      //   });
+
+      // if (!Object.values(this.errors).some((error) => error)) {
+      //   try {
+      //     const registerRequest = await axios.post(url, body);
+      //     await createUser(registerRequest.data);
+      //     this.$router.push("/auth/authenticate");
+      //   } catch (error) {
+      //     console.error(error);
+      //   }
+      // }
+      //this.$router.push("/auth/authenticate");
+
+      // axios.post(url, body)
+      //     .then(response => {
+      //       console.log(response);
+      //     })
+      //     .catch(error => {
+      //       if (error.response.status === 409 ) {
+      //         this.emailInUse = true;
+      //       }
+      //     })
     },
     clearErrors() {
       this.errors = {
@@ -132,7 +161,7 @@ export default {
         lastname: "",
         email: "",
         password: "",
-        passwordConfirmation: "",
+        confirmedPassword: "",
       };
     },
     validateEmail(email) {
@@ -174,10 +203,10 @@ export default {
     }
   },
   validatePasswordConfirm() {
-    if (!this.passwordConfirmation) {
-      this.errors.passwordConfirmation = "Password confirmation is required";
-    } else if (this.password !== this.passwordConfirmation) {
-      this.errors.passwordConfirmation =
+    if (!this.confirmedPassword) {
+      this.errors.confirmedPassword = "Password confirmation is required";
+    } else if (this.password !== this.confirmedPassword) {
+      this.errors.confirmedPassword =
         "Password confirmation does not match";
     }
   },

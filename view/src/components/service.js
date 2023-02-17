@@ -1,25 +1,27 @@
-import axios from 'axios';
+import axios from 'axios'
 
-const baseUrl = 'http://localhost:8080/';
+const URI = 'http://localhost:8080';
 
-export default {
-    async fetchDuePages() {
-        try {
-            const response = await axios.get(baseUrl);
-            return response.data;
-        } catch (error) {
-            console.error(error);
-            return [];
+class RegistrationService {
+    async register(firstname, lastname, email, password, confirmedPassword) {
+        const data = {
+            firstname,
+            lastname,
+            email,
+            password,
+            confirmedPassword
         }
-    },
-
-    async addDuePage(page) {
         try {
-            const response = await axios.post(baseUrl, page);
-            return response.data;
+            const response = await axios.post(URI + '/auth/register', JSON.stringify(data), {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            return response.data
         } catch (error) {
-            console.error(error);
-            return {};
+            throw new Error(`Registration failed: ${error.message}`)
         }
     }
-};
+}
+
+export default new RegistrationService()

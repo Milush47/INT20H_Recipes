@@ -38,7 +38,7 @@ class AuthenticationControllerTest {
         private final RegisterRequest registerRequest = RegisterRequest.builder()
                 .firstname("Milush")
                 .lastname("Kulpiiev")
-                .email("irror.fy.eagle@gmail.com")
+                .email("mirror.fy.eagle@gmail.com")
                 .password("Milush_1234")
                 .confirmedPassword("Milush_1234")
                 .build();
