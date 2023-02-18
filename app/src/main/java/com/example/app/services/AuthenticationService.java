@@ -2,17 +2,14 @@ package com.example.app.services;
 
 import com.example.app.errors.ExceptionMessage;
 import com.example.app.events.OnRegistrationSuccessEvent;
-import com.example.app.services.EmailService;
 import com.example.app.dto.AuthenticationRequest;
 import com.example.app.dto.ResetPasswordRequest;
 import com.example.app.dto.AuthenticationResponse;
 import com.example.app.dto.RegisterRequest;
-import com.example.app.services.JWTService;
 import com.example.app.models.repositories.UserRepository;
 import com.example.app.models.entities.User;
 import com.example.app.models.enums.Role;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,10 +33,10 @@ public class AuthenticationService {
             WebRequest request
     ) {
         var user = User.builder()
-                .firstname(registerRequest.getFirstname())
-                .lastname(registerRequest.getLastname())
-                .email(registerRequest.getEmail())
-                .password(passwordEncoder.encode(registerRequest.getPassword()))
+                .firstname(registerRequest.firstname())
+                .lastname(registerRequest.lastname())
+                .email(registerRequest.email())
+                .password(passwordEncoder.encode(registerRequest.password()))
                 .role(Role.USER)
                 .build();
 
@@ -58,15 +55,15 @@ public class AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
+                        request.email(),
+                        request.password()
                 )
         );
 
-        var user = userRepository.findByEmail(request.getEmail())
+        var user = userRepository.findByEmail(request.email())
                 .orElseThrow(
                         () -> new UsernameNotFoundException(
-                                String.format(ExceptionMessage.USER_NOT_FOUND, request.getEmail())
+                                String.format(ExceptionMessage.USER_NOT_FOUND, request.email())
                         )
                 );
 
@@ -80,19 +77,19 @@ public class AuthenticationService {
     public AuthenticationResponse resetPassword(ResetPasswordRequest request) {
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getNewPassword()
+                        request.email(),
+                        request.newPassword()
                 )
         );
 
-        User user = userRepository.findByEmail(request.getEmail())
+        User user = userRepository.findByEmail(request.email())
                 .orElseThrow(
                         () -> new UsernameNotFoundException(
-                                String.format(ExceptionMessage.USER_NOT_FOUND, request.getEmail())
+                                String.format(ExceptionMessage.USER_NOT_FOUND, request.email())
                         )
                 );
 
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        user.setPassword(passwordEncoder.encode(request.newPassword()));
         userRepository.save(user);
 
         var jwtToken = jwtService.generateToken(user);

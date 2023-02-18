@@ -16,8 +16,12 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testcontainers.shaded.okhttp3.RequestBody;
 
+import java.util.regex.Matcher;
+
 import static com.example.app.errors.ExceptionMessage.EMAIl_IS_TAKEN;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.matchers.JUnitMatchers.containsString;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -43,7 +47,16 @@ class AuthenticationControllerTest {
                 .confirmedPassword("Milush_1234")
                 .build();
 
-        private final String RequestJSONBody = asJsonString(registerRequest);
+        private final RegisterRequest wrongRegisterRequest = RegisterRequest.builder()
+                .firstname("")
+                .lastname("")
+                .email("wrong email")
+                .password("Wrong password")
+                .confirmedPassword("Wrong confirmed password")
+                .build();
+
+        private final String RequestJSONBody        = asJsonString(registerRequest);
+        private final String wrongRequestJSONBody   = asJsonString(wrongRegisterRequest);
 
         @Test
         @DisplayName("should register user successfully")
@@ -79,7 +92,7 @@ class AuthenticationControllerTest {
         @Test
         @DisplayName("should return 409 error")
         void failed_registration() throws Exception {
-            when(emailService.isEmailExists(registerRequest.getEmail()))
+            when(emailService.isEmailExists(registerRequest.email()))
                     .thenReturn(true);
 
             mockMvc.perform(
@@ -101,7 +114,48 @@ class AuthenticationControllerTest {
                     )
                     .andExpect(
                             jsonPath("$.message")
-                                    .value(EMAIl_IS_TAKEN)
+                                    .value(String.format(EMAIl_IS_TAKEN, registerRequest.email()))
+                    )
+                    .andExpect(
+                            jsonPath("$.description")
+                                    .value("uri=/auth/register")
+                    );
+        }
+
+        @Test
+        @DisplayName("should return validation errors")
+        void check_register_validation() throws Exception {
+
+            String message = """
+                    Email must be well-formed
+                    Firstname is required
+                    Lastname is required
+                    The password fields must match""";
+
+            mockMvc.perform(
+                    post("/auth/register")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(wrongRequestJSONBody)
+                    )
+                    .andExpect(
+                            status()
+                                    .isBadRequest()
+                    )
+                    .andExpect(
+                            content()
+                                    .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(
+                            jsonPath("$.statusCode")
+                                    .value(400)
+                    )
+                    .andExpect(
+                            jsonPath("$.timeStamp")
+                                    .isNotEmpty()
+                    )
+                    .andExpect(
+                            jsonPath("$.message")
+                                    .value(message)
                     )
                     .andExpect(
                             jsonPath("$.description")
@@ -109,9 +163,6 @@ class AuthenticationControllerTest {
                     );
         }
     }
-
-
-
 
     @Test
     void authenticate() {

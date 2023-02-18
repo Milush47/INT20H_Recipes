@@ -2,10 +2,8 @@ package com.example.app.controllers;
 
 import com.example.app.dto.AuthenticationRequest;
 import com.example.app.dto.ResetPasswordRequest;
-import com.example.app.dto.AuthenticationResponse;
 import com.example.app.dto.RegisterRequest;
 import com.example.app.dto.SuccessResponse;
-import com.example.app.errors.ExceptionMessage;
 import com.example.app.services.AuthenticationService;
 import com.example.app.services.EmailService;
 import jakarta.servlet.ServletException;
@@ -14,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.nio.file.AccessDeniedException;
 
 import static com.example.app.errors.ExceptionMessage.EMAIl_IS_TAKEN;
 
@@ -35,6 +33,7 @@ import static com.example.app.errors.ExceptionMessage.EMAIl_IS_TAKEN;
  */
 @RestController
 @RequestMapping("/auth")
+@Validated
 @RequiredArgsConstructor
 public class AuthenticationController {
     // Autowired variables using constructor
@@ -44,16 +43,16 @@ public class AuthenticationController {
     // responsible for registration new user.
     @PostMapping("/register")
     public ResponseEntity<SuccessResponse> register(
-            @RequestBody RegisterRequest registerRequest,
+            @Valid @RequestBody RegisterRequest registerRequest,
             WebRequest request
-    ) {
+    )  {
 
-        String email = registerRequest.getEmail();
+        String email = registerRequest.email();
 
         if(emailService.isEmailExists(email)) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    EMAIl_IS_TAKEN
+                    String.format(EMAIl_IS_TAKEN, email)
             );
         }
 

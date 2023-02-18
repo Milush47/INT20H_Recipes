@@ -17,7 +17,7 @@ public @interface FieldMatch {
     String first();
     String second();
 
-    @Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
+    @Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE, ElementType.RECORD_COMPONENT})
     @Retention(RetentionPolicy.RUNTIME)
     @Documented
     @interface List
