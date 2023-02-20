@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 
 import static com.example.app.errors.ExceptionMessage.INVALID_INPUT;
 
@@ -21,23 +23,24 @@ import static com.example.app.errors.ExceptionMessage.INVALID_INPUT;
         )
 )
 public record RegisterRequest(
-        @NotBlank(message = "${INVALID_INPUT.fn_is_req}")
+        @NotBlank(message = "Firstname is required")
         @JsonProperty("firstname")
         String firstname,
-        @NotBlank(message = "${INVALID_INPUT.ln_is_req}")
+        @NotBlank(message = "Lastname is required")
         @JsonProperty("lastname")
         String lastname,
-        @Email(message = "{email_valid}")
-        @NotBlank(message = "${INVALID_INPUT.email_is_req}")
+        @Email(message = "Email must be well-formed")
+        @NotBlank(message = "Email is required")
         @JsonProperty("email")
         String email,
-        @ValidPassword(message = "${INVALID_INPUT.pswd_valid}")
-        @NotBlank(message = "${INVALID_INPUT.pswd_is_req}")
+        @ValidPassword(message = "Password must contain at least 8 characters. " +
+                                 "At least one UpperCase letter, one special character(!#$*_), one digit")
+        @NotBlank(message = "Password is required")
         @JsonProperty("password")
         String password,
-        @NotBlank(message = "${INVALID_INPUT.pswd_conf_is_req}")
+        @NotBlank(message = "Password confirmation is required")
         @JsonProperty("confirmedPassword")
         String confirmedPassword
 ) {
-        @Builder public RegisterRequest {}
+        @Builder public RegisterRequest{}
 }

@@ -2,8 +2,10 @@ package com.example.app.config;
 
 import com.example.app.models.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -12,16 +14,22 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import static com.example.app.errors.ExceptionMessage.USER_NOT_FOUND;
 
 @Configuration
 @RequiredArgsConstructor
-public class ApplicationConfig {
+public class ApplicationConfig implements WebMvcConfigurer {
     private final UserRepository userRepository;
 
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found") );
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        String.format(USER_NOT_FOUND, username)
+                ) );
     }
 
     @Bean
@@ -43,4 +51,24 @@ public class ApplicationConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
+//    @Bean
+//    public MessageSource messageSource() {
+//        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+//
+//        messageSource.setBasename("messages");
+//        messageSource.setDefaultEncoding("UTF-8");
+//
+//        return messageSource;
+//    }
+//
+//    @Bean
+//    public LocalValidatorFactoryBean getValidator() {
+//        LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+//
+//        bean.setValidationMessageSource(messageSource());
+//
+//        return bean;
+//    }
 }

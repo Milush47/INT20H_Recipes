@@ -8,10 +8,11 @@ import jakarta.validation.constraints.NotBlank;
     RegisterRequest is used for receiving data from resetPassword form
  */
 public record ResetPasswordRequest(
-        @Email(message = "${INVALID_INPUT.email_valid}")
-        @NotBlank(message = "${INVALID_INPUT.email_is_req}")
+        @Email(message = "Email must be well-formed")
+        @NotBlank(message = "Email is required")
         String email,
-        @ValidPassword(message = "${INVALID_INPUT.pswd_valid}")
-        @NotBlank(message = "${INVALID_INPUT.pswd_is_req}")
+        @ValidPassword(message = "Password must contain at least 8 characters. " +
+                                "At least one UpperCase letter, one special character(!#$*_), one digit")
+        @NotBlank(message = "Password is required")
         String newPassword
 ) {}
