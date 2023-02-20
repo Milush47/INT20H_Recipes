@@ -27,12 +27,14 @@
       </div>
     </div>
     <button type="submit" :disabled="!isValidEmail || !isValidPassword">
-      Login
+      Sign in
     </button>
   </form>
 </template>
 
 <script>
+import { userService } from "../service/userService.js";
+
 export default {
   data() {
     return {
@@ -42,7 +44,7 @@ export default {
   },
   computed: {
     isValidEmail() {
-      const emailRegex = /^\S+@\S+\.\S+$/;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return emailRegex.test(this.email);
     },
     isValidPassword() {
@@ -51,23 +53,22 @@ export default {
   },
   methods: {
     submit() {
-      const reigsterRequest = {
+      const request = {
         email: this.email,
         password: this.password,
       };
-      fetch("http://localhost:8080/auth/authenicate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(reigsterRequest),
-      })
+      userService
+        .login(request)
         .then((response) => {
-          if (response.ok) {
-          } else {
-          }
+          this.$router.push('/profile')
         })
         .catch((error) => {
+          if (error.response && error.response.status === 409) {
+            this.emailError = error.message;
+          } else {
+            this.loginError =
+              "Sign in failed. Please try again later.";
+          }
         });
     },
   },
@@ -76,10 +77,9 @@ export default {
 
 <style>
 .is-invalid {
-  border-color: red;
+  border: 1px solid red;
 }
 .invalid-feedback {
   color: red;
-  font-size: 14px;
 }
 </style>

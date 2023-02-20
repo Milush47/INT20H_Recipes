@@ -125,10 +125,14 @@ export default {
       userService
         .register(registerRequest)
         .then((response) => {
-          // handle successful registration
+          this.$router.push("/auth/authenticate");
         })
         .catch((error) => {
-          // handle registration error
+          if (error.response && error.response.status === 409) {
+          this.emailError = error.message;
+        } else {
+          this.registrationError = 'Registration failed. Please try again later.'
+        }
         });
     },
   },
