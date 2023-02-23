@@ -1,78 +1,85 @@
 <template>
-  <section class="login">
-    <div class="container">
-      <h1 class="title">Вхід</h1>
-      <form @submit.prevent="register" method="post">
-        <div class="form-group">
-          <label for="email">Електронна пошта</label>
-          <input
-            type="text"
-            class="form-control"
-            id="email"
-            placeholder="Введіть електронну пошту"
-            required
-            v-model="email"
-          />
-          <span oninput="validateEmail(email)" v-if="msg.email">{{ msg.email }}</span>
-        </div>
-        <div class="form-group">
-          <label for="password">Пароль</label>
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-            placeholder="Пароль"
-            required
-            v-model="password"
-          />
-          <span oninput="validatePassword(password)" v-if="msg.password">{{ msg.password }}</span>
-        </div>
-        <button type="submit" class="btn btn-primary">Увійти</button>
-      </form>
+  <form @submit.prevent="submit">
+    <div>
+      <label for="email">Email:</label>
+      <input
+        type="email"
+        id="email"
+        v-model="email"
+        :class="{ 'is-invalid': !isValidEmail }"
+        required
+      />
+      <div class="invalid-feedback" v-if="!isValidEmail">
+        Please enter a valid email address.
+      </div>
     </div>
-  </section>
+    <div>
+      <label for="password">Password:</label>
+      <input
+        type="password"
+        id="password"
+        v-model="password"
+        :class="{ 'is-invalid': !isValidPassword }"
+        required
+      />
+      <div class="invalid-feedback" v-if="!isValidPassword">
+        Password must be at least 8 characters long.
+      </div>
+    </div>
+    <button type="submit" :disabled="!isValidEmail || !isValidPassword">
+      Sign in
+    </button>
+  </form>
 </template>
 
 <script>
+import { userService } from "../service/userService.js";
+
 export default {
-  name: "LoginPage",
   data() {
     return {
       email: "",
       password: "",
-      msg: [],
     };
   },
+  computed: {
+    isValidEmail() {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(this.email);
+    },
+    isValidPassword() {
+      return this.password.length >= 8;
+    },
+  },
   methods: {
-    validateEmail(value) {
-      const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-      if (regex.test(value)) {
-        this.msg["email"] = "";
-      } else if (!regex.test(value)) {
-        this.msg["email"] = "Неправильна поштова скринька";
-      }
-    },
-    validatePassword(value) {
-      if (value.length >= 8) {
-        this.msg["password"] = "";
-      } else {
-        this.msg["password"] = "Пароль повинен бути не менше 8 символів";
-      }
-    },
-  },
-  watch: {
-    email(value) {
-      this.email = value;
-      this.validateEmail();
-    },
-    password(value) {
-      this.password = value;
-      this.validatePassword();
+    submit() {
+      const request = {
+        email: this.email,
+        password: this.password,
+      };
+      userService
+        .login(request)
+        .then((response) => {
+          this.$router.push('/profile')
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 409) {
+            this.emailError = error.message;
+          } else {
+            this.loginError =
+              "Sign in failed. Please try again later.";
+          }
+        });
     },
   },
-
 };
 </script>
 
-<style scoped></style>
+<style>
+.is-invalid {
+  border: 1px solid red;
+}
+.invalid-feedback {
+  color: red;
+}
+</style>

@@ -1,262 +1,149 @@
 <template>
-  <div class="registration-container">
-    <h1>Sign Up</h1>
-    <form @submit.prevent="register" method="post">
-      <div class="form-group">
-        <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" v-model="registerRequest.firstname" />
-        <p oninput="validateFirstName()" v-if="errors.firstname" class="error">{{ errors.firstname }}</p>
+  <form @submit.prevent="submit">
+    <div>
+      <label for="first-name">First Name:</label>
+      <input
+        type="text"
+        id="first-name"
+        v-model="firstname"
+        :class="{ 'is-invalid': !isValidFirstName }"
+        required
+      />
+      <div class="invalid-feedback" v-if="!isValidFirstName">
+        Please enter a valid first name.
       </div>
-      <div class="form-group">
-        <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" v-model="registerRequest.lastname" />
-        <p oninput="validateLastName()" v-if="errors.lastname" class="error">{{ errors.lastname }}</p>
+    </div>
+    <div>
+      <label for="last-name">Last Name:</label>
+      <input
+        type="text"
+        id="last-name"
+        v-model="lastname"
+        :class="{ 'is-invalid': !isValidLastName }"
+        required
+      />
+      <div class="invalid-feedback" v-if="!isValidLastName">
+        Please enter a valid last name.
       </div>
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" v-model="registerRequest.email" />
-        <p v-if="errors.email" class="error">{{ errors.email }}</p>
-        <p oninput="validateEmailForm()" v-if="emailInUse" class="error-message">Email is already in use.</p>
+    </div>
+    <div>
+      <label for="email">Email:</label>
+      <input
+        type="email"
+        id="email"
+        v-model="email"
+        :class="{ 'is-invalid': !isValidEmail }"
+        required
+      />
+      <div class="invalid-feedback" v-if="!isValidEmail">
+        Please enter a valid email address.
       </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" v-model="registerRequest.password" />
-        <p oninput="validatePassword()" v-if="errors.password" class="error">{{ errors.password }}</p>
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input
+        type="password"
+        id="password"
+        v-model="password"
+        :class="{ 'is-invalid': !isValidPassword }"
+        required
+      />
+      <div class="invalid-feedback" v-if="!isValidPassword">
+        Password must be at least 8 characters long.
       </div>
-      <div class="form-group">
-        <label for="passwordConfirmation">Confirm Password:</label>
-        <input
-          type="password"
-          id="passwordConfirmation"
-          v-model="registerRequest.confirmedPassword"
-        />
-        <p oninput="validatePasswordConfirm()" v-if="errors.confirmedPassword" class="error">
-          {{ errors.passwordConfirmation }}
-        </p>
+    </div>
+    <div>
+      <label for="confirm-password">Confirm Password:</label>
+      <input
+        type="password"
+        id="confirm-password"
+        v-model="confirmedPassword"
+        :class="{ 'is-invalid': !isValidConfirmPassword }"
+        required
+      />
+      <div class="invalid-feedback" v-if="!isValidConfirmPassword">
+        Passwords do not match.
       </div>
-      <div class="form-group">
-        <button type="submit" @onclick="register">Sign Up</button>
-      </div>
-    </form>
-  </div>
+    </div>
+    <button
+      type="submit"
+      :disabled="
+        !isValidFirstName ||
+        !isValidLastName ||
+        !isValidEmail ||
+        !isValidPassword ||
+        !isValidConfirmPassword
+      "
+    >
+      Register
+    </button>
+  </form>
 </template>
 
 <script>
-import axios from "axios";
-import { createUser } from "@/service/userService";
-import RegistrationService from "./service.js";
+import { userService } from "../service/userService.js";
 
 export default {
   data() {
     return {
-      registerRequest: {
-        firstname: "",
-        lastname: "",
-        email: "",
-        password: "",
-        confirmedPassword: "",
-      },
-      emailInUse: false,
-      errors: {
-        firstname: "",
-        lastname: "",
-        email: "",
-        password: "",
-        confirmedPassword: "",
-      },
+      firstname: "",
+      lastname: "",
+      email: "",
+      password: "",
+      confirmedPassword: "",
     };
   },
+  computed: {
+    isValidFirstName() {
+      const nameRegex = /^[a-zA-Z]+([ -][a-zA-Z]+)*$/;
+      return nameRegex.test(this.firstname);
+    },
+    isValidLastName() {
+      const nameRegex = /^[a-zA-Z]+([ -][a-zA-Z]+)*$/;
+      return nameRegex.test(this.lastname);
+    },
+    isValidEmail() {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(this.email);
+    },
+    isValidPassword() {
+      return this.password.length >= 8;
+    },
+    isValidConfirmPassword() {
+      return this.confirmedPassword === this.password;
+    },
+  },
   methods: {
-    async register() {
-      this.clearErrors();
-
-      // if (!this.firstname) {
-      //   this.errors.firstname = "First name is required";
-      // }
-      // if (!this.lastname) {
-      //   this.errors.lastname = "Last name is required";
-      // }
-      // if (!this.email) {
-      //   this.errors.email = "Email is required";
-      // } else if (!this.validateEmail(this.email)) {
-      //   this.errors.email = "Email is invalid";
-      // }
-      // if (!this.password) {
-      //   this.errors.password = "Password is required";
-      // } else if (this.password.length < 8) {
-      //   this.errors.password = "Password must be at least 8 characters long";
-      // } else if (!this.password.match(/[a-z]/)) {
-      //   this.errors.password = "Password must contain at least one lowercase letter";
-      // } else if (!this.password.match(/[A-Z]/)) {
-      //   this.errors.password = "Password must contain at least one uppercase letter";
-      // } else if (!this.password.match(/[0-9]/)) {
-      //   this.errors.password = "Password must contain at least one number";
-      // } else if (!this.password.match(/[!@#$%^&*]/)) {
-      //   this.errors.password = "Password must contain at least one special character";
-      // }
-      // if (!this.passwordConfirmation) {
-      //   this.errors.passwordConfirmation = "Password confirmation is required";
-      // } else if (this.password !== this.passwordConfirmation) {
-      //   this.errors.passwordConfirmation =
-      //     "Password confirmation does not match";
-      // }
-
-      // const url = "http://localhost:8080/auth/register";
-      // const body = {
-      //   firstname: this.registerRequest.firstname,
-      //   lastname: this.registerRequest.lastname,
-      //   email: this.registerRequest.email,
-      //   password: this.registerRequest.password,
-      //   confirmedPassword: this.registerRequest.confirmedPassword,
-      // };
-
-      try {
-        const response = await RegistrationService.register(
-            this.firstname,
-            this.lastname,
-            this.email,
-            this.password,
-            this.confirmedPassword
-        )
-        // Do something with the successful response, e.g. redirect the user
-      } catch (error) {
-        // Handle the error, e.g. display an error message
-        console.error(error)
-      }
-
-      // RegistrationService.register(this.registerRequest)
-      //   .then((response) => {
-      //     console.log(response);
-      //   })
-      //   .catch((error) => {
-      //     if (error.response.status === 409) {
-      //       this.emailInUse = true;
-      //     }
-      //   });
-
-      // if (!Object.values(this.errors).some((error) => error)) {
-      //   try {
-      //     const registerRequest = await axios.post(url, body);
-      //     await createUser(registerRequest.data);
-      //     this.$router.push("/auth/authenticate");
-      //   } catch (error) {
-      //     console.error(error);
-      //   }
-      // }
-      //this.$router.push("/auth/authenticate");
-
-      // axios.post(url, body)
-      //     .then(response => {
-      //       console.log(response);
-      //     })
-      //     .catch(error => {
-      //       if (error.response.status === 409 ) {
-      //         this.emailInUse = true;
-      //       }
-      //     })
-    },
-    clearErrors() {
-      this.errors = {
-        firstname: "",
-        lastname: "",
-        email: "",
-        password: "",
-        confirmedPassword: "",
+    submit() {
+      const registerRequest = {
+        firstname: this.firstname,
+        lastname: this.lastname,
+        email: this.email,
+        password: this.password,
+        confirmedPassword: this.confirmedPassword,
       };
+      userService
+        .register(registerRequest)
+        .then((response) => {
+          this.$router.push("/auth/authenticate");
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 409) {
+          this.emailError = error.message;
+        } else {
+          this.registrationError = 'Registration failed. Please try again later.'
+        }
+        });
     },
-    validateEmail(email) {
-      const regex =
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return regex.test(email);
-    },
-
-  validateFirstName() {
-    if (!this.firstname) {
-      this.errors.firstname = "First name is required";
-    }
   },
-  validateLastName() {
-    if (!this.lastname) {
-      this.errors.lastname = "Last name is required";
-    }
-  },
-  validateEmailForm() {
-    if (!this.email) {
-      this.errors.email = "Email is required";
-    } else if (!this.validateEmail(this.email)) {
-      this.errors.email = "Email is invalid";
-    }
-  },
-  validatePassword() {
-    if (!this.password) {
-      this.errors.password = "Password is required";
-    } else if (this.password.length < 8) {
-      this.errors.password = "Password must be at least 8 characters long";
-    } else if (!this.password.match(/[a-z]/)) {
-      this.errors.password = "Password must contain at least one lowercase letter";
-    } else if (!this.password.match(/[A-Z]/)) {
-      this.errors.password = "Password must contain at least one uppercase letter";
-    } else if (!this.password.match(/[0-9]/)) {
-      this.errors.password = "Password must contain at least one number";
-    } else if (!this.password.match(/[!@#$%^&*]/)) {
-      this.errors.password = "Password must contain at least one special character";
-    }
-  },
-  validatePasswordConfirm() {
-    if (!this.confirmedPassword) {
-      this.errors.confirmedPassword = "Password confirmation is required";
-    } else if (this.password !== this.confirmedPassword) {
-      this.errors.confirmedPassword =
-        "Password confirmation does not match";
-    }
-  },
-  },
-  };
+};
 </script>
 
 <style>
-.registration-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
+.is-invalid {
+  border: 1px solid red;
 }
-
-h2 {
-  margin-bottom: 20px;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-input {
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid gray;
-  border-radius: 5px;
-  width: 300px;
-}
-
-.error {
+.invalid-feedback {
   color: red;
-  font-size: 14px;
-  margin-top: 5px;
-}
-
-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: green;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }
 </style>
