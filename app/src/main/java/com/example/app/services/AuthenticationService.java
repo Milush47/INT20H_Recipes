@@ -37,6 +37,8 @@ public class AuthenticationService {
                 .lastname(registerRequest.lastname())
                 .email(registerRequest.email())
                 .password(passwordEncoder.encode(registerRequest.password()))
+                .enabled(true)
+                .locked(false)
                 .role(Role.USER)
                 .build();
 

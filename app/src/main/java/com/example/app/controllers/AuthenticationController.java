@@ -82,9 +82,7 @@ public class AuthenticationController {
 
     // responsible for log outing user
     @PostMapping("/logout")
-    public ResponseEntity<SuccessResponse> logout(HttpServletRequest request) throws ServletException {
-        request.logout();
-        request.getSession().invalidate();
+    public ResponseEntity<SuccessResponse> logout() {
 
         return ResponseEntity.ok(
                 SuccessResponse.builder()
