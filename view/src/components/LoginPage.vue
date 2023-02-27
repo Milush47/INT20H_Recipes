@@ -6,7 +6,7 @@
         type="email"
         id="email"
         v-model="email"
-        :class="{ 'is-invalid': !isValidEmail }"
+        :class="{ 'is-invalid': !isValidEmail, }"
         required
       />
       <div class="invalid-feedback" v-if="!isValidEmail">
@@ -34,6 +34,7 @@
 
 <script>
 import { userService } from "../service/userService.js";
+import axios from "axios";
 
 export default {
   data() {
@@ -48,8 +49,12 @@ export default {
       return emailRegex.test(this.email);
     },
     isValidPassword() {
-      return this.password.length >= 8;
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%_^&*])(?=.{8,})/;
+      return passwordRegex.test(this.password);
     },
+    isExistEmail() {
+      
+    }
   },
   methods: {
     submit() {
