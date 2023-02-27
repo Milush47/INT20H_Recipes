@@ -1,6 +1,3 @@
-import axios from "../service/axios-auth.js";
-import Cookies from "js-cookie";
-
 const BASE_URL = "http://localhost:8080";
 
 // export const userService = {
@@ -102,10 +99,16 @@ export const userService = {
       const response = await axios.post(
         `${BASE_URL}/auth/register`,
         JSON.stringify(registerRequest),
-        registerRequest);
-        
-        localStorage.setItem('token', registerRequest.data.data.token);
-
+        registerRequest,
+        {
+          headers: {
+            Authorization: access_token,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const jwtToken = response.data.token;
+      Cookies.set("jwtToken", jwtToken, { expires: 2 });
       return response.data.user;
     } catch (error) {
       console.error(error);

@@ -55,15 +55,15 @@ public class GlobalExceptionHandler {
             WebRequest                      request
     ) {
 
-        String errorMessage = INVALID_INPUT.values().stream()
-                .filter(msg -> ex.getMessage().contains(msg))
-                .sorted()
-                .collect(Collectors.joining(System.lineSeparator()));
+//        String errorMessage = INVALID_INPUT.values().stream()
+//                .filter(msg -> ex.getMessage().contains(msg))
+//                .sorted()
+//                .collect(Collectors.joining(System.lineSeparator()));
 
         return ErrorMessage.builder()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .timeStamp(new Date())
-                .message(errorMessage)
+                .message(ex.getMessage())
                 .description(request.getDescription(false))
                 .build();
     }

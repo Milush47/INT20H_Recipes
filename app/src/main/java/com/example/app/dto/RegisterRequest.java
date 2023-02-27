@@ -19,26 +19,25 @@ import static com.example.app.errors.ExceptionMessage.INVALID_INPUT;
         @FieldMatch(
                 first   = "password",
                 second  = "confirmedPassword",
-                message = "The password fields must match"
+                message = "pswds.must.match"
         )
 )
 public record RegisterRequest(
-        @NotBlank(message = "Firstname is required")
+        @NotBlank(message = "fn.is.req")
         @JsonProperty("firstname")
         String firstname,
-        @NotBlank(message = "Lastname is required")
+        @NotBlank(message = "ln.is.req")
         @JsonProperty("lastname")
         String lastname,
-        @Email(message = "Email must be well-formed")
-        @NotBlank(message = "Email is required")
+        @Email(message = "email.valid")
+        @NotBlank(message = "email.is.req")
         @JsonProperty("email")
         String email,
-        @ValidPassword(message = "Password must contain at least 8 characters. " +
-                                 "At least one UpperCase letter, one special character(!#$*_), one digit")
-        @NotBlank(message = "Password is required")
+        @ValidPassword(message = "pswd.valid")
+        @NotBlank(message = "pswd.is.req")
         @JsonProperty("password")
         String password,
-        @NotBlank(message = "Password confirmation is required")
+        @NotBlank(message = "pswd.conf.is.req")
         @JsonProperty("confirmedPassword")
         String confirmedPassword
 ) {

@@ -17,6 +17,9 @@ class RegistrationService {
                     'Content-Type': 'application/json'
                 }
             })
+
+            localStorage.setItem("token", response.data.data.token);
+
             return response.data
         } catch (error) {
             throw new Error(`Registration failed: ${error.message}`)
