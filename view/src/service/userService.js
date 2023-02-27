@@ -102,16 +102,10 @@ export const userService = {
       const response = await axios.post(
         `${BASE_URL}/auth/register`,
         JSON.stringify(registerRequest),
-        registerRequest,
-        {
-          headers: {
-            Authorization: access_token,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const jwtToken = response.data.token;
-      Cookies.set("jwtToken", jwtToken, { expires: 2 });
+        registerRequest);
+        
+        localStorage.setItem('token', registerRequest.data.data.token);
+
       return response.data.user;
     } catch (error) {
       console.error(error);

@@ -142,17 +142,15 @@ export default {
   //   },
 
     async register() {
-      const registerRequest = await axios.post('auth/register', {
+      const registerRequest = {
         firstname: this.firstname,
         lastname: this.lastname,
         email: this.email,
         password: this.password,
         confirmedPassword: this.confirmedPassword,
-      });
+      };
 
       await userService.register(registerRequest);
-
-      localStorage.setItem('token', registerRequest.data.data.token);
 
       this.$router.push('/auth/authenticate');
     }
