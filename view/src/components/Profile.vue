@@ -38,6 +38,10 @@ export default {
     //     console.error(err);
     //   }
     // },
+    logout() {
+      userService.logout();
+      this.$router.push("/auth/authenticate");
+    },
   },
 };
 </script>

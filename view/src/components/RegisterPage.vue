@@ -82,8 +82,8 @@
 
 <script>
 import { userService } from "../service/userService.js";
-import { mapActions } from 'vuex';
-import axios from 'axios';
+import { mapActions } from "vuex";
+import axios from "axios";
 
 export default {
   data() {
@@ -115,47 +115,60 @@ export default {
       return this.confirmedPassword === this.password;
     },
   },
+  mounted() {
+    localStorage.clear();
+  },
   methods: {
-  //   ...mapActions(['submit']),
-  //   submit() {
-  //     const userData = {
-  //       firstname: this.firstname,
-  //       lastname: this.lastname,
-  //       email: this.email,
-  //       password: this.password,
-  //       confirmedPassword: this.confirmedPassword,
-  //     };
-  //     // userService
-  //     //   .register(registerRequest)
-  //     //   .then((response) => {
-  //     //     this.$router.push("/auth/authenticate");
-  //     //   })
-  //     //   .catch((error) => {
-  //     //     if (error.response && error.response.status === 409) {
-  //     //     this.emailError = error.message;
-  //     //   } else {
-  //     //     this.registrationError = 'Registration failed. Please try again later.'
-  //     //   }
-  //     //   });
+    //   ...mapActions(['submit']),
+    //   submit() {
+    //     const userData = {
+    //       firstname: this.firstname,
+    //       lastname: this.lastname,
+    //       email: this.email,
+    //       password: this.password,
+    //       confirmedPassword: this.confirmedPassword,
+    //     };
+    //     // userService
+    //     //   .register(registerRequest)
+    //     //   .then((response) => {
+    //     //     this.$router.push("/auth/authenticate");
+    //     //   })
+    //     //   .catch((error) => {
+    //     //     if (error.response && error.response.status === 409) {
+    //     //     this.emailError = error.message;
+    //     //   } else {
+    //     //     this.registrationError = 'Registration failed. Please try again later.'
+    //     //   }
+    //     //   });
 
-  //       this.submit(userData);
-  //   },
+    //       this.submit(userData);
+    //   },
 
     async register() {
-      const registerRequest = await axios.post('auth/register', {
+      const registerRequest = {
         firstname: this.firstname,
         lastname: this.lastname,
         email: this.email,
         password: this.password,
         confirmedPassword: this.confirmedPassword,
-      });
+      };
 
       await userService.register(registerRequest);
 
-      localStorage.setItem('token', registerRequest.data.data.token);
+      // const registerRequest = await this.$axios.post('auth/register', {
+      //   firstname: this.firstname,
+      //   lastname: this.lastname,
+      //   email: this.email,
+      //   password: this.password,
+      //   confirmedPassword: this.confirmedPassword,
+      // });
 
-      this.$router.push('/auth/authenticate');
-    }
+      // await userService.register(registerRequest);
+
+      // localStorage.updateItem('token', registerRequest.data.data.token);
+
+      this.$router.push("/auth/authenticate");
+    },
   },
 };
 </script>

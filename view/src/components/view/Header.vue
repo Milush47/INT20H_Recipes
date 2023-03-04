@@ -70,6 +70,15 @@
               Створити рецепт
             </router-link>
           </li>
+          <li class="nav-item">
+            <router-link
+              to="/profile"
+              class="nav-link"
+              style="text-align: center"
+            >
+              Мій профіль
+            </router-link>
+          </li>
           <li class="nav-item text-center me-sm-2 ms-sm-2">
             <router-link
               to="/auth/authenticate"

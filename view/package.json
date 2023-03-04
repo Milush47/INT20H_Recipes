@@ -12,6 +12,7 @@
     "bootstrap": "^5.2.3",
     "bootstrap-vue": "^2.23.1",
     "vue": "^3.2.47",
+    "vue-cookies": "^1.8.2",
     "vue-router": "^4.1.6",
     "vuex": "^4.1.0"
   },
