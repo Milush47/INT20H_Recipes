@@ -37,6 +37,7 @@ public class User implements UserDetails {
     @Column(name = "preferences", length = 256)
     private String preferences;
 
+    @Column(name = "confirmed")
     private boolean confirmed;
 
     @Enumerated(EnumType.STRING)
@@ -51,6 +52,9 @@ public class User implements UserDetails {
 
     @Column(name = "enabled")
     private Boolean enabled;
+
+    @Column(name = "avatarUrl")
+    private String avatarUrl;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
