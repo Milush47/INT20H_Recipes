@@ -1,6 +1,7 @@
 package com.example.app.services;
 
 import com.example.app.dto.UserRequest;
+import com.example.app.dto.UserResponse;
 import com.example.app.errors.ExceptionMessage;
 import com.example.app.events.OnRegistrationSuccessEvent;
 import com.example.app.models.entities.User;
@@ -84,5 +85,14 @@ public class UserService implements UserDetailsService {
         }
 
         userRepository.save(user);
+    }
+
+    public UserResponse mapToUserResponse(User user) {
+        return UserResponse.builder()
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .email(user.getEmail())
+                .preferences(user.getPreferences())
+                .build();
     }
 }

@@ -1,9 +1,6 @@
 package com.example.app.controllers;
 
-import com.example.app.dto.AuthenticationRequest;
-import com.example.app.dto.ResetPasswordRequest;
-import com.example.app.dto.RegisterRequest;
-import com.example.app.dto.SuccessResponse;
+import com.example.app.dto.*;
 import com.example.app.services.AuthenticationService;
 import com.example.app.services.EmailService;
 import jakarta.servlet.ServletException;
@@ -58,11 +55,13 @@ public class AuthenticationController {
             );
         }
 
+        RegistrationResponse response = authService.register(registerRequest, request);
+
         return ResponseEntity.ok(
                 SuccessResponse.builder()
                         .message("User is registered")
                         .success(true)
-                        .data(authService.register(registerRequest, request))
+                        .data(response)
                         .build()
         );
     }
@@ -73,11 +72,13 @@ public class AuthenticationController {
             @Valid @RequestBody AuthenticationRequest request
     ) {
 
+        AuthenticationResponse response = authService.authenticate(request);
+
         return ResponseEntity.ok(
                 SuccessResponse.builder()
                         .message("User is authenticated")
                         .success(true)
-                        .data(authService.authenticate(request))
+                        .data(response)
                         .build()
         );
     }

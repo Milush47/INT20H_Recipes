@@ -1,11 +1,8 @@
 package com.example.app.services;
 
+import com.example.app.dto.*;
 import com.example.app.errors.ExceptionMessage;
 import com.example.app.events.OnRegistrationSuccessEvent;
-import com.example.app.dto.AuthenticationRequest;
-import com.example.app.dto.ResetPasswordRequest;
-import com.example.app.dto.AuthenticationResponse;
-import com.example.app.dto.RegisterRequest;
 import com.example.app.models.repositories.UserRepository;
 import com.example.app.models.entities.User;
 import com.example.app.models.enums.Role;
@@ -25,10 +22,11 @@ public class AuthenticationService {
     private final   PasswordEncoder             passwordEncoder;
     private final   JWTService                  jwtService;
     private final   AuthenticationManager       authManager;
-    private final   EmailService                emailService;
+    private final   UserService                 userService;
     private         ApplicationEventPublisher   eventPublisher;
 
-    public AuthenticationResponse register(
+
+    public RegistrationResponse register(
             RegisterRequest registerRequest,
             WebRequest request
     ) {
@@ -49,7 +47,7 @@ public class AuthenticationService {
 
         var jwtToken = jwtService.generateToken(user);
 
-        return AuthenticationResponse.builder()
+        return RegistrationResponse.builder()
                 .token(jwtToken)
                 .build();
     }
@@ -73,6 +71,7 @@ public class AuthenticationService {
 
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .user(userService.mapToUserResponse(user))
                 .build();
     }
 
