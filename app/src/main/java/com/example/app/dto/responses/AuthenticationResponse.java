@@ -1,6 +1,5 @@
-package com.example.app.dto;
+package com.example.app.dto.responses;
 
-import com.example.app.models.entities.User;
 import lombok.Builder;
 
 /*

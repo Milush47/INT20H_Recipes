@@ -1,25 +1,17 @@
 package com.example.app.controllers;
 
-import com.example.app.dto.SuccessResponse;
-import com.example.app.dto.UserRequest;
-import com.example.app.dto.UserResponse;
-import com.example.app.errors.ExceptionMessage;
+import com.example.app.dto.responses.SuccessResponse;
+import com.example.app.dto.requests.UserRequest;
+import com.example.app.dto.responses.UserResponse;
 import com.example.app.models.entities.User;
 import com.example.app.models.repositories.UserRepository;
-import com.example.app.services.JWTService;
 import com.example.app.services.StorageService;
 import com.example.app.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/profile")

@@ -1,6 +1,11 @@
 package com.example.app.controllers;
 
-import com.example.app.dto.*;
+import com.example.app.dto.requests.AuthenticationRequest;
+import com.example.app.dto.requests.RegisterRequest;
+import com.example.app.dto.requests.ResetPasswordRequest;
+import com.example.app.dto.responses.AuthenticationResponse;
+import com.example.app.dto.responses.RegistrationResponse;
+import com.example.app.dto.responses.SuccessResponse;
 import com.example.app.services.AuthenticationService;
 import com.example.app.services.EmailService;
 import jakarta.servlet.ServletException;
@@ -10,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

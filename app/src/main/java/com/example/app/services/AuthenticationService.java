@@ -1,6 +1,10 @@
 package com.example.app.services;
 
-import com.example.app.dto.*;
+import com.example.app.dto.requests.AuthenticationRequest;
+import com.example.app.dto.requests.RegisterRequest;
+import com.example.app.dto.requests.ResetPasswordRequest;
+import com.example.app.dto.responses.AuthenticationResponse;
+import com.example.app.dto.responses.RegistrationResponse;
 import com.example.app.errors.ExceptionMessage;
 import com.example.app.events.OnRegistrationSuccessEvent;
 import com.example.app.models.repositories.UserRepository;

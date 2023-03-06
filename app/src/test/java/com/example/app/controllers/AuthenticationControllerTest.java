@@ -1,28 +1,19 @@
 package com.example.app.controllers;
 
-import com.example.app.dto.RegisterRequest;
-import com.example.app.dto.SuccessResponse;
+import com.example.app.dto.requests.RegisterRequest;
 import com.example.app.services.EmailService;
 import org.junit.jupiter.api.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
-import org.testcontainers.shaded.okhttp3.RequestBody;
-
-import java.util.regex.Matcher;
 
 import static com.example.app.errors.ExceptionMessage.EMAIl_IS_TAKEN;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.matchers.JUnitMatchers.containsString;
-import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

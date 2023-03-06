@@ -1,4 +1,4 @@
-package com.example.app.dto;
+package com.example.app.dto.requests;
 
 import com.example.app.validators.fieldMatch.FieldMatch;
 import com.example.app.validators.password.ValidPassword;

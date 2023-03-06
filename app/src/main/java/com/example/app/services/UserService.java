@@ -1,7 +1,7 @@
 package com.example.app.services;
 
-import com.example.app.dto.UserRequest;
-import com.example.app.dto.UserResponse;
+import com.example.app.dto.requests.UserRequest;
+import com.example.app.dto.responses.UserResponse;
 import com.example.app.errors.ExceptionMessage;
 import com.example.app.events.OnRegistrationSuccessEvent;
 import com.example.app.models.entities.User;

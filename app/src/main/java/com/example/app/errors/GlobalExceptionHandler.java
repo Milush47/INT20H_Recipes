@@ -1,13 +1,14 @@
 package com.example.app.errors;
 
-import com.example.app.dto.ErrorMessage;
+import com.example.app.dto.responses.ErrorMessage;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -17,7 +18,9 @@ import java.util.stream.Collectors;
 import static com.example.app.errors.ExceptionMessage.INVALID_INPUT;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
+    private final MessageSource messageSource;
 
     @ExceptionHandler(ResponseStatusException.class)
     @ResponseStatus(value = HttpStatus.CONFLICT)
@@ -56,15 +59,22 @@ public class GlobalExceptionHandler {
             WebRequest                      request
     ) {
 
-//        String errorMessage = INVALID_INPUT.values().stream()
-//                .filter(msg -> ex.getMessage().contains(msg))
-//                .sorted()
-//                .collect(Collectors.joining(System.lineSeparator()));
+        List<String> errorMessageKeys = INVALID_INPUT.stream()
+                .filter(msg -> ex.getMessage().contains(msg))
+                .toList();
+
+        String errorMessages = errorMessageKeys.stream()
+                .map(key -> messageSource.getMessage(
+                        key,
+                        null,
+                        Locale.getDefault())
+                )
+                .collect(Collectors.joining(System.lineSeparator()));
 
         return ErrorMessage.builder()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .timeStamp(new Date())
-                .message(ex.getMessage())
+                .message(errorMessages)
                 .description(request.getDescription(false))
                 .build();
     }
