@@ -24,7 +24,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/profile")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
+//@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
     private final   UserService                 userService;
     private final   StorageService              storageService;
