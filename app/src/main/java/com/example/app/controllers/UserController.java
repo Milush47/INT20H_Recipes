@@ -12,6 +12,8 @@ import com.example.app.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -26,11 +28,22 @@ import java.util.Objects;
 public class UserController {
     private final   UserService                 userService;
     private final   StorageService              storageService;
-    private final UserRepository userRepository;
+    private final   UserRepository              userRepository;
 
     @GetMapping
-    public ResponseEntity<SuccessResponse> getUser(WebRequest request) {
-        User user = userService.getUserByToken(request);
+    public ResponseEntity<SuccessResponse> getUser(
+            WebRequest request,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        String email = userDetails.getUsername();
+
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(
+                        () -> new UsernameNotFoundException(
+                                String.format(ExceptionMessage.USER_NOT_FOUND, email)
+                        )
+                );
 
         UserResponse userResponse = UserResponse.builder()
                 .firstname(user.getFirstname())
