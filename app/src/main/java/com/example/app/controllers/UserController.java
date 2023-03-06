@@ -32,18 +32,20 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<SuccessResponse> getUser(
-            WebRequest request,
-            @AuthenticationPrincipal UserDetails userDetails
+            WebRequest request
+            //@AuthenticationPrincipal UserDetails userDetails
     ) {
-        String email = userDetails.getUsername();
+        User user = userService.getUserByToken(request);
 
-        User user = userRepository
-                .findByEmail(email)
-                .orElseThrow(
-                        () -> new UsernameNotFoundException(
-                                String.format(ExceptionMessage.USER_NOT_FOUND, email)
-                        )
-                );
+//        String email = userDetails.getUsername();
+//
+//        User user = userRepository
+//                .findByEmail(email)
+//                .orElseThrow(
+//                        () -> new UsernameNotFoundException(
+//                                String.format(ExceptionMessage.USER_NOT_FOUND, email)
+//                        )
+//                );
 
         UserResponse userResponse = UserResponse.builder()
                 .firstname(user.getFirstname())
@@ -61,7 +63,7 @@ public class UserController {
         );
     }
 
-    @PostMapping
+    @PostMapping("/upload/{id}")
     public ResponseEntity<Void> uploadImage(
             @RequestParam("imagePath")  MultipartFile   image,
                                         WebRequest      request
@@ -73,7 +75,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping
+    @PutMapping("/update/{id}")
     public ResponseEntity<Void> updateUser(
             @RequestBody    UserRequest userRequest,
                             WebRequest  request
@@ -85,7 +87,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteUser(
             WebRequest request
     ) {
