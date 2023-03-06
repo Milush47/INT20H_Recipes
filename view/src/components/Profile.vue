@@ -4,12 +4,14 @@
     <p>First Name: {{ userData.firstname }}</p>
     <p>Last Name: {{ userData.lastname }}</p>
     <p>Email: {{ userData.email }}</p>
+    <p>Preferences: {{ userData.preferences }}</p>
     <button class="logout-btn" @click="logout">Logout</button>
   </div>
 </template>
 
 <script>
 import { userService } from "../service/userService.js";
+import axios from "axios";
 
 export default {
   name: "Profile",
@@ -19,25 +21,23 @@ export default {
         firstname: "",
         lastname: "",
         email: "",
+        preferences: "",
       },
     };
   },
   mounted() {
-    //this.fetchUser();
+    this.fetchUserData();
   },
-  async created() {
-    const response = await axios.get('user'); 
-    this.userData = response.data;
-  },
+
   methods: {
-    // async fetchUser() {
-    //   try {
-    //     const res = await axios.get("http://localhost:8080/user");
-    //     this.user = res.data;
-    //   } catch (err) {
-    //     console.error(err);
-    //   }
-    // },
+    async fetchUserData() {
+      try {
+        userService.getCurrentUser();
+        this.userData = response.data.data;
+      } catch (error) {
+        this.error = error.message;
+      }
+    },
     logout() {
       userService.logout();
       this.$router.push("/auth/authenticate");

@@ -119,31 +119,6 @@ export default {
     localStorage.clear();
   },
   methods: {
-    //   ...mapActions(['submit']),
-    //   submit() {
-    //     const userData = {
-    //       firstname: this.firstname,
-    //       lastname: this.lastname,
-    //       email: this.email,
-    //       password: this.password,
-    //       confirmedPassword: this.confirmedPassword,
-    //     };
-    //     // userService
-    //     //   .register(registerRequest)
-    //     //   .then((response) => {
-    //     //     this.$router.push("/auth/authenticate");
-    //     //   })
-    //     //   .catch((error) => {
-    //     //     if (error.response && error.response.status === 409) {
-    //     //     this.emailError = error.message;
-    //     //   } else {
-    //     //     this.registrationError = 'Registration failed. Please try again later.'
-    //     //   }
-    //     //   });
-
-    //       this.submit(userData);
-    //   },
-
     async register() {
       const registerRequest = {
         firstname: this.firstname,
@@ -154,18 +129,6 @@ export default {
       };
 
       await userService.register(registerRequest);
-
-      // const registerRequest = await this.$axios.post('auth/register', {
-      //   firstname: this.firstname,
-      //   lastname: this.lastname,
-      //   email: this.email,
-      //   password: this.password,
-      //   confirmedPassword: this.confirmedPassword,
-      // });
-
-      // await userService.register(registerRequest);
-
-      // localStorage.updateItem('token', registerRequest.data.data.token);
 
       this.$router.push("/auth/authenticate");
     },
