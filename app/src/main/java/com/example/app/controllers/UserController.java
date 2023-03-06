@@ -60,7 +60,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping
+    @PutMapping
     public ResponseEntity<Void> updateUser(
             @RequestBody    UserRequest userRequest,
                             WebRequest  request
