@@ -1,4 +1,4 @@
-package com.example.app.config;
+package com.example.app.errors;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +20,8 @@ public class AuthEntryPointJWT implements AuthenticationEntryPoint {
 
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getOutputStream().println("{ \"error\": \"" + "You should authenticate first"  + "\" }");
+        response.getOutputStream().println(
+                "{ \"error\": \"" + "You should authenticate first"  + "\" }"
+        );
     }
 }

@@ -1,17 +1,23 @@
 package com.example.app.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import java.util.Objects;
 import java.util.Properties;
 
 
 @Configuration
+@RequiredArgsConstructor
 public class EmailConfig {
-    private static final int GMAIL_SMTP_PORT = 587;
+    private final Environment env;
+    @Value("${spring.mail.port}")
+    private int GMAIL_SMTP_PORT;
     @Value("${spring.mail.host}")
     private String host;
     @Value("${spring.mail.username}")

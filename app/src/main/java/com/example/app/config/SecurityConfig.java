@@ -1,5 +1,6 @@
 package com.example.app.config;
 
+import com.example.app.errors.AuthEntryPointJWT;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,11 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.CorsConfigurationSource;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -21,7 +17,7 @@ import java.util.Arrays;
 public class SecurityConfig {
     private final JWTAuthenticationFilter   jwtAuthFilter;
     private final AuthenticationProvider    authenticationProvider;
-    private final AuthEntryPointJWT         authEntryPointJWT;
+    private final AuthEntryPointJWT authEntryPointJWT;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
