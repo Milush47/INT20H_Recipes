@@ -55,8 +55,13 @@ public class AuthenticationService {
 
         var jwtToken = jwtService.generateToken(user);
 
+        VerificationToken verificationToken = verificationTokenRepository.
+                findByUser(user)
+                .orElseThrow(() -> new InvalidVerificationTokenException("Verification token not found"));
+
         return RegistrationResponse.builder()
-                .token(jwtToken)
+                .JWT(jwtToken)
+                .verificationToken(verificationToken.getToken())
                 .build();
     }
 

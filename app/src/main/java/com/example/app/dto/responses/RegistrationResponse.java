@@ -7,7 +7,8 @@ import lombok.Builder;
     AuthenticationResponse is used for sending response when user has just authorized
  */
 public record RegistrationResponse(
-        String token
+        String JWT,
+        String verificationToken
 ) {
     @Builder public RegistrationResponse {}
 }
