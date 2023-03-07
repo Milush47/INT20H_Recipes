@@ -125,7 +125,7 @@ public class AuthenticationController {
     public ResponseEntity<SuccessResponse> verifyEmail(
             @RequestParam("verificationToken")  String      token,
                                                 WebRequest  request
-    ) throws ClassNotFoundException {
+    ) throws InvalidVerificationTokenException {
         User user = userService.getUserByToken(request);
 
         if(authService.isVerificationTokenValid(token, user)) {

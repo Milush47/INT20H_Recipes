@@ -116,10 +116,10 @@ public class AuthenticationService {
     public boolean isVerificationTokenValid(
             String token,
             User user
-    ) throws ClassNotFoundException {
+    ) throws InvalidVerificationTokenException {
         VerificationToken verificationToken = verificationTokenRepository
                 .findByToken(token)
-                .orElseThrow(() -> new ClassNotFoundException("token not found"));
+                .orElseThrow(() -> new InvalidVerificationTokenException("Verification token is not found"));
 
         if(verificationToken.isExpired()) {
             throw new InvalidVerificationTokenException("Verification token is expired");
