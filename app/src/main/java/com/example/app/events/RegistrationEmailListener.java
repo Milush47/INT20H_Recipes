@@ -30,7 +30,7 @@ public class RegistrationEmailListener implements ApplicationListener<OnRegistra
 
         String recipient    = user.getEmail();
         String subject      = "Registration confirmation";
-        String url          = "http://localhost:5173" + "/auth" + "/confirmRegistration?token=" + token;
+        String url          = event.getAppUrl() + "/auth" + "/confirmRegistration?token=" + token;
 
         System.out.println(event.getLocale());
 
@@ -40,7 +40,7 @@ public class RegistrationEmailListener implements ApplicationListener<OnRegistra
                 event.getLocale()
         );
 
-        String text = message + "http://localhost:8080" + url;
+        String text = message + "http://localhost:5173" + url;
 
         emailService.sendRegistrationConfirmation(recipient, subject, text);
     }
