@@ -15,7 +15,6 @@ import java.util.Properties;
 @Configuration
 @RequiredArgsConstructor
 public class EmailConfig {
-    private final Environment env;
     @Value("${spring.mail.port}")
     private int GMAIL_SMTP_PORT;
     @Value("${spring.mail.host}")
