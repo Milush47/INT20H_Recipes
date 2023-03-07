@@ -25,26 +25,10 @@ public class UserController {
     @GetMapping
     public ResponseEntity<SuccessResponse> getUser(
             WebRequest request
-            //@AuthenticationPrincipal UserDetails userDetails
     ) {
         User user = userService.getUserByToken(request);
 
-//        String email = userDetails.getUsername();
-//
-//        User user = userRepository
-//                .findByEmail(email)
-//                .orElseThrow(
-//                        () -> new UsernameNotFoundException(
-//                                String.format(ExceptionMessage.USER_NOT_FOUND, email)
-//                        )
-//                );
-
-        UserResponse userResponse = UserResponse.builder()
-                .firstname(user.getFirstname())
-                .lastname(user.getLastname())
-                .email(user.getEmail())
-                .preferences(user.getPreferences())
-                .build();
+        UserResponse userResponse = userService.mapToUserResponse(user);
 
         return ResponseEntity.ok(
                 SuccessResponse.builder()

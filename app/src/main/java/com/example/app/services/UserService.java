@@ -92,6 +92,7 @@ public class UserService implements UserDetailsService {
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .email(user.getEmail())
+                .confirmed(user.isConfirmed())
                 .preferences(user.getPreferences())
                 .build();
     }

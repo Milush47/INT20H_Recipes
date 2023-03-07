@@ -10,6 +10,8 @@ public record UserResponse(
         String lastname,
         @JsonProperty("email")
         String email,
+        @JsonProperty("confirmed")
+        Boolean confirmed,
         @JsonProperty("preferences")
         String preferences
 

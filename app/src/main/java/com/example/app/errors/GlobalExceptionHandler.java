@@ -78,4 +78,19 @@ public class GlobalExceptionHandler {
                 .description(request.getDescription(false))
                 .build();
     }
+
+    @ExceptionHandler(InvalidVerificationTokenException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorMessage handleInvalidVerificationToken(
+            InvalidVerificationTokenException   ex,
+            WebRequest                          request
+    ) {
+
+        return ErrorMessage.builder()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .timeStamp(new Date())
+                .message(ex.getMessage())
+                .description(request.getDescription(false))
+                .build();
+    }
 }

@@ -6,10 +6,13 @@ import com.example.app.dto.requests.ResetPasswordRequest;
 import com.example.app.dto.responses.AuthenticationResponse;
 import com.example.app.dto.responses.RegistrationResponse;
 import com.example.app.errors.ExceptionMessage;
+import com.example.app.errors.InvalidVerificationTokenException;
 import com.example.app.events.OnRegistrationSuccessEvent;
+import com.example.app.models.entities.VerificationToken;
 import com.example.app.models.repositories.UserRepository;
 import com.example.app.models.entities.User;
 import com.example.app.models.enums.Role;
+import com.example.app.models.repositories.VerificationTokenRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +30,7 @@ public class AuthenticationService {
     private final   JWTService                  jwtService;
     private final   AuthenticationManager       authManager;
     private final   UserService                 userService;
+    private final   VerificationTokenRepository verificationTokenRepository;
     private         ApplicationEventPublisher   eventPublisher;
 
 
@@ -102,5 +106,23 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
+    }
+
+    public boolean isVerificationTokenValid(
+            String token,
+            User user
+    ) throws ClassNotFoundException {
+        VerificationToken verificationToken = verificationTokenRepository
+                .findByToken(token)
+                .orElseThrow(() -> new ClassNotFoundException("token not found"));
+
+        if(verificationToken.isExpired()) {
+            throw new InvalidVerificationTokenException("Verification token is expired");
+        }
+
+        return (verificationToken.getUser())
+                .equals(
+                        user
+                );
     }
 }
