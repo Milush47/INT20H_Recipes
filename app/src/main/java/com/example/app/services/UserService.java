@@ -43,7 +43,7 @@ public class UserService implements UserDetailsService {
         verificationTokenRepository.save(newUserToken);
     }
 
-    public User getUserByToken(WebRequest request) {
+    public User getUserByJWT(WebRequest request) {
         String token = (
                 Objects.requireNonNull(
                         request.getHeader("Authorization")

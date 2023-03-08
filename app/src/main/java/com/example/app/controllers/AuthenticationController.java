@@ -123,26 +123,19 @@ public class AuthenticationController {
 
     @PostMapping("/confirmRegistration")
     public ResponseEntity<SuccessResponse> verifyEmail(
-            @RequestParam("verificationToken")  String      token,
+            @RequestParam("verificationToken")  String      verificationToken,
                                                 WebRequest  request
     ) throws InvalidVerificationTokenException {
-        User user = userService.getUserByToken(request);
+        User user = userService.getUserByJWT(request);
 
-        if(authService.isVerificationTokenValid(token, user)) {
-            user.setConfirmed(true);
+        UserResponse response = emailService.completeVerification(verificationToken, user);
 
-            UserResponse userResponse = userService.mapToUserResponse(user);
-
-            return ResponseEntity.ok(
-                    SuccessResponse.builder()
-                            .message("Email is confirmed")
-                            .success(true)
-                            .data(userResponse)
-                            .build()
-            );
-        } else {
-            throw new InvalidVerificationTokenException("Verification token is invalid");
-        }
+        return ResponseEntity.ok(
+                SuccessResponse.builder()
+                        .message("Email is verified")
+                        .success(true)
+                        .data(response)
+                        .build()
+        );
     }
-
 }

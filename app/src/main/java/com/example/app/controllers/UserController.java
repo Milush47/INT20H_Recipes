@@ -26,7 +26,7 @@ public class UserController {
     public ResponseEntity<SuccessResponse> getUser(
             WebRequest request
     ) {
-        User user = userService.getUserByToken(request);
+        User user = userService.getUserByJWT(request);
 
         UserResponse userResponse = userService.mapToUserResponse(user);
 
@@ -44,7 +44,7 @@ public class UserController {
             @RequestParam("imagePath")  MultipartFile   image,
                                         WebRequest      request
     ) {
-        User user = userService.getUserByToken(request);
+        User user = userService.getUserByJWT(request);
 
         storageService.uploadImage(image, user);
 
@@ -56,7 +56,7 @@ public class UserController {
             @RequestBody    UserRequest userRequest,
                             WebRequest  request
     ) {
-        User user = userService.getUserByToken(request);
+        User user = userService.getUserByJWT(request);
 
         userService.updateUser(user, userRequest, request);
 
@@ -67,7 +67,7 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(
             WebRequest request
     ) {
-        User user = userService.getUserByToken(request);
+        User user = userService.getUserByJWT(request);
 
         userRepository.delete(user);
 

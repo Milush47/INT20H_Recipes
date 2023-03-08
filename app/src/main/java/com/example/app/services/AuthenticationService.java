@@ -113,21 +113,5 @@ public class AuthenticationService {
                 .build();
     }
 
-    public boolean isVerificationTokenValid(
-            String token,
-            User user
-    ) throws InvalidVerificationTokenException {
-        VerificationToken verificationToken = verificationTokenRepository
-                .findByToken(token)
-                .orElseThrow(() -> new InvalidVerificationTokenException("Verification token is not found"));
 
-        if(verificationToken.isExpired()) {
-            throw new InvalidVerificationTokenException("Verification token is expired");
-        }
-
-        return (verificationToken.getUser())
-                .equals(
-                        user
-                );
-    }
 }
