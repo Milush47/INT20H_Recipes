@@ -6,13 +6,11 @@ import com.example.app.dto.requests.ResetPasswordRequest;
 import com.example.app.dto.responses.AuthenticationResponse;
 import com.example.app.dto.responses.RegistrationResponse;
 import com.example.app.errors.ExceptionMessage;
-import com.example.app.errors.InvalidVerificationTokenException;
 import com.example.app.events.OnRegistrationSuccessEvent;
-import com.example.app.models.entities.VerificationToken;
-import com.example.app.models.repositories.UserRepository;
-import com.example.app.models.entities.User;
-import com.example.app.models.enums.Role;
-import com.example.app.models.repositories.VerificationTokenRepository;
+import com.example.app.models.token.Token;
+import com.example.app.models.user.UserRepository;
+import com.example.app.models.user.User;
+import com.example.app.models.user.Role;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,14 +23,12 @@ import org.springframework.web.context.request.WebRequest;
 @Service
 @AllArgsConstructor
 public class AuthenticationService {
-    private final   UserRepository              userRepository;
     private final   PasswordEncoder             passwordEncoder;
     private final   JWTService                  jwtService;
     private final   AuthenticationManager       authManager;
     private final   UserService                 userService;
-    private final   VerificationTokenRepository verificationTokenRepository;
+    private final   TokenService                tokenService;
     private         ApplicationEventPublisher   eventPublisher;
-
 
     public RegistrationResponse register(
             RegisterRequest registerRequest,
@@ -48,16 +44,14 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .build();
 
-        userRepository.save(user);
+        userService.save(user);
 
         String appUrl = request.getContextPath();
         eventPublisher.publishEvent(new OnRegistrationSuccessEvent(user, request.getLocale(), appUrl));
 
-        var jwtToken = jwtService.generateToken(user);
+        var     jwtToken            = jwtService.generateToken(user);
 
-        VerificationToken verificationToken = verificationTokenRepository.
-                findByUser(user)
-                .orElseThrow(() -> new InvalidVerificationTokenException("Verification token not found"));
+        Token   verificationToken   = tokenService.findByUser(user);
 
         return RegistrationResponse.builder()
                 .JWT(jwtToken)
@@ -73,14 +67,8 @@ public class AuthenticationService {
                 )
         );
 
-        var user = userRepository.findByEmail(request.email())
-                .orElseThrow(
-                        () -> new UsernameNotFoundException(
-                                String.format(ExceptionMessage.USER_NOT_FOUND, request.email())
-                        )
-                );
-
-        var jwtToken = jwtService.generateToken(user);
+        var user        = userService.findByEmail(request.email());
+        var jwtToken    = jwtService.generateToken(user);
 
         return AuthenticationResponse.builder()
                 .token(jwtToken)
@@ -96,15 +84,10 @@ public class AuthenticationService {
                 )
         );
 
-        User user = userRepository.findByEmail(request.email())
-                .orElseThrow(
-                        () -> new UsernameNotFoundException(
-                                String.format(ExceptionMessage.USER_NOT_FOUND, request.email())
-                        )
-                );
+        User user = userService.findByEmail(request.email());
 
         user.setPassword(passwordEncoder.encode(request.newPassword()));
-        userRepository.save(user);
+        userService.save(user);
 
         var jwtToken = jwtService.generateToken(user);
 
@@ -112,6 +95,4 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
-
-
 }

@@ -1,7 +1,7 @@
 package com.example.app.errors;
 
-public class InvalidVerificationTokenException extends RuntimeException {
-    public InvalidVerificationTokenException(String message) {
+public class InvalidTokenException extends RuntimeException {
+    public InvalidTokenException(String message) {
         super(message);
     }
 

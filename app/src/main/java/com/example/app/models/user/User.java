@@ -1,6 +1,5 @@
-package com.example.app.models.entities;
+package com.example.app.models.user;
 
-import com.example.app.models.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 

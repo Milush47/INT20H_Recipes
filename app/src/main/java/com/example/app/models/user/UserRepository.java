@@ -1,7 +1,7 @@
-package com.example.app.models.repositories;
+package com.example.app.models.user;
 
 
-import com.example.app.models.entities.User;
+import com.example.app.models.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

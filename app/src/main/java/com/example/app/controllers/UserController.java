@@ -3,8 +3,8 @@ package com.example.app.controllers;
 import com.example.app.dto.responses.SuccessResponse;
 import com.example.app.dto.requests.UserRequest;
 import com.example.app.dto.responses.UserResponse;
-import com.example.app.models.entities.User;
-import com.example.app.models.repositories.UserRepository;
+import com.example.app.models.user.User;
+import com.example.app.models.user.UserRepository;
 import com.example.app.services.StorageService;
 import com.example.app.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
     private final   UserService                 userService;
     private final   StorageService              storageService;
-    private final   UserRepository              userRepository;
-
     @GetMapping
     public ResponseEntity<SuccessResponse> getUser(
             WebRequest request
@@ -69,7 +67,7 @@ public class UserController {
     ) {
         User user = userService.getUserByJWT(request);
 
-        userRepository.delete(user);
+        userService.delete(user);
 
         return ResponseEntity.ok().build();
     }

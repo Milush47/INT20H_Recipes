@@ -2,8 +2,8 @@ package com.example.app.controllers;
 
 import com.example.app.services.CatalogService;
 import com.example.app.services.JWTService;
-import com.example.app.models.repositories.UserRepository;
-import com.example.app.models.entities.User;
+import com.example.app.models.user.UserRepository;
+import com.example.app.models.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

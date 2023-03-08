@@ -1,5 +1,6 @@
 package com.example.app.models.entities;
 
+import com.example.app.models.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

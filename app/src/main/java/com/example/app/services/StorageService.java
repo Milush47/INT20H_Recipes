@@ -1,7 +1,7 @@
 package com.example.app.services;
 
-import com.example.app.models.entities.User;
-import com.example.app.models.repositories.UserRepository;
+import com.example.app.models.user.User;
+import com.example.app.models.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

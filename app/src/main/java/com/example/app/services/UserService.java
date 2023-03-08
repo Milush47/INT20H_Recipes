@@ -3,11 +3,10 @@ package com.example.app.services;
 import com.example.app.dto.requests.UserRequest;
 import com.example.app.dto.responses.UserResponse;
 import com.example.app.errors.ExceptionMessage;
+import com.example.app.errors.InvalidTokenException;
 import com.example.app.events.OnRegistrationSuccessEvent;
-import com.example.app.models.entities.User;
-import com.example.app.models.entities.VerificationToken;
-import com.example.app.models.repositories.UserRepository;
-import com.example.app.models.repositories.VerificationTokenRepository;
+import com.example.app.models.user.User;
+import com.example.app.models.user.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,12 +20,11 @@ import java.util.Objects;
 @AllArgsConstructor
 @Service
 public class UserService implements UserDetailsService {
-    private final           UserRepository              userRepository;
-    private final           VerificationTokenRepository verificationTokenRepository;
-    private final           JWTService                  jwtService;
-    private final           StorageService              storageService;
-    private                 ApplicationEventPublisher   eventPublisher;
-
+    private final           UserRepository                  userRepository;
+    private final           JWTService                      jwtService;
+    private final           StorageService                  storageService;
+    private final           TokenService                    tokenService;
+    private                 ApplicationEventPublisher       eventPublisher;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -35,12 +33,6 @@ public class UserService implements UserDetailsService {
                         () -> new UsernameNotFoundException(
                                 String.format(ExceptionMessage.USER_NOT_FOUND, email))
                 );
-    }
-
-    public void createVerificationToken(User user, String token) {
-        VerificationToken newUserToken = new VerificationToken(token, user);
-
-        verificationTokenRepository.save(newUserToken);
     }
 
     public User getUserByJWT(WebRequest request) {
@@ -58,6 +50,23 @@ public class UserService implements UserDetailsService {
                                 String.format(ExceptionMessage.USER_NOT_FOUND, email)
                         )
                 );
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(
+                        () -> new UsernameNotFoundException(
+                                String.format(ExceptionMessage.USER_NOT_FOUND, email)
+                        )
+                );
+    }
+
+    public boolean isPresent(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 
     public void updateUser(
@@ -95,5 +104,21 @@ public class UserService implements UserDetailsService {
                 .confirmed(user.isConfirmed())
                 .preferences(user.getPreferences())
                 .build();
+    }
+
+    public UserResponse completeVerification(String token, User user) {
+        if(tokenService.isTokenValid(token, user)) {
+            user.setConfirmed(true);
+
+            save(user);
+
+            return mapToUserResponse(user);
+        }
+
+        throw new InvalidTokenException("Verification token is invalid");
+    }
+
+    public void delete(User user) {
+        userRepository.delete(user);
     }
 }

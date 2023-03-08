@@ -9,13 +9,13 @@ import java.util.Locale;
 
 @Getter
 @Setter
-public class OnRegistrationSuccessEvent extends ApplicationEvent {
+public class ResetPasswordByEmailEvent extends ApplicationEvent {
     private static final    Long    serialVersionUID = 1L;
     private                 String  appUrl;
     private                 Locale  locale;
     private                 User    user;
 
-    public OnRegistrationSuccessEvent(
+    public ResetPasswordByEmailEvent(
             User    user,
             Locale  locale,
             String  appUrl

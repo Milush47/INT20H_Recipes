@@ -1,9 +1,9 @@
 package com.example.app.entities;
 
-import com.example.app.models.entities.User;
-import com.example.app.models.enums.Role;
+import com.example.app.models.user.User;
+import com.example.app.models.user.Role;
 
-import com.example.app.models.repositories.UserRepository;
+import com.example.app.models.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

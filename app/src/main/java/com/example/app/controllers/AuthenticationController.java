@@ -7,11 +7,8 @@ import com.example.app.dto.responses.AuthenticationResponse;
 import com.example.app.dto.responses.RegistrationResponse;
 import com.example.app.dto.responses.SuccessResponse;
 import com.example.app.dto.responses.UserResponse;
-import com.example.app.errors.InvalidVerificationTokenException;
-import com.example.app.models.entities.User;
-import com.example.app.models.entities.VerificationToken;
-import com.example.app.models.repositories.UserRepository;
-import com.example.app.models.repositories.VerificationTokenRepository;
+import com.example.app.errors.InvalidTokenException;
+import com.example.app.models.user.User;
 import com.example.app.services.AuthenticationService;
 import com.example.app.services.EmailService;
 import com.example.app.services.UserService;
@@ -19,7 +16,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -125,10 +121,10 @@ public class AuthenticationController {
     public ResponseEntity<SuccessResponse> verifyEmail(
             @RequestParam("verificationToken")  String      verificationToken,
                                                 WebRequest  request
-    ) throws InvalidVerificationTokenException {
+    ) throws InvalidTokenException {
         User user = userService.getUserByJWT(request);
 
-        UserResponse response = emailService.completeVerification(verificationToken, user);
+        UserResponse response = userService.completeVerification(verificationToken, user);
 
         return ResponseEntity.ok(
                 SuccessResponse.builder()

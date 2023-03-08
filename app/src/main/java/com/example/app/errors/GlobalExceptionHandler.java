@@ -79,10 +79,10 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
-    @ExceptionHandler(InvalidVerificationTokenException.class)
+    @ExceptionHandler(InvalidTokenException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage handleInvalidVerificationToken(
-            InvalidVerificationTokenException   ex,
+            InvalidTokenException ex,
             WebRequest                          request
     ) {
 
