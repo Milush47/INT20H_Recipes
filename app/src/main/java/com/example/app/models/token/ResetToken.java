@@ -17,5 +17,7 @@ import java.util.Date;
 @Table(name = "reset_token")
 @DiscriminatorValue("reset")
 public class ResetToken extends Token {
-
+    public ResetToken(String token, User user) {
+        super(token, user);
+    }
 }
