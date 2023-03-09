@@ -44,8 +44,8 @@ public class TokenService {
                 .orElseThrow(() -> new InvalidTokenException("Token is invalid"));
     }
 
-    public Token findByUser(User user) {
-        return tokenRepository.findByUser(user)
+    public Token findByUser(User user, String type) {
+        return tokenRepository.findByUserAndType(user, type)
                 .orElseThrow(() -> new InvalidTokenException("Token is invalid"));
     }
 

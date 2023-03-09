@@ -1,5 +1,6 @@
 package com.example.app.services;
 
+import com.example.app.dto.requests.ResetPasswordRequest;
 import com.example.app.dto.requests.UserRequest;
 import com.example.app.dto.responses.UserResponse;
 import com.example.app.errors.ExceptionMessage;
@@ -12,6 +13,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequest;
 
@@ -24,6 +26,7 @@ public class UserService implements UserDetailsService {
     private final           JWTService                      jwtService;
     private final           StorageService                  storageService;
     private final           TokenService                    tokenService;
+    private final           PasswordEncoder                 passwordEncoder;
     private                 ApplicationEventPublisher       eventPublisher;
 
     @Override
@@ -116,6 +119,18 @@ public class UserService implements UserDetailsService {
         }
 
         throw new InvalidTokenException("Verification token is invalid");
+    }
+
+    public UserResponse completePasswordResetting(String token, User user, ResetPasswordRequest request) {
+        if(tokenService.isTokenValid(token, user)) {
+            user.setPassword(passwordEncoder.encode(request.newPassword()));
+
+            save(user);
+
+            return mapToUserResponse(user);
+        }
+
+        throw new InvalidTokenException("Reset token is invalid");
     }
 
     public void delete(User user) {

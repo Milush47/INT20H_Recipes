@@ -10,7 +10,7 @@ import java.time.temporal.ChronoUnit;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="token_type",
+@DiscriminatorColumn(name="type",
         discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Setter
@@ -29,6 +29,9 @@ public abstract class Token {
     protected Instant createdDate;
     @Column(name = "expiry_date")
     protected Instant expiryDate;
+
+    @Column(name = "type", insertable = false, updatable = false)
+    protected String type;
 
     public Token(String token, User user) {
         this.token = token;

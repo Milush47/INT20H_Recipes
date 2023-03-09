@@ -5,8 +5,11 @@ import com.example.app.dto.requests.RegisterRequest;
 import com.example.app.dto.requests.ResetPasswordRequest;
 import com.example.app.dto.responses.AuthenticationResponse;
 import com.example.app.dto.responses.RegistrationResponse;
+import com.example.app.dto.responses.ResetPasswordResponse;
 import com.example.app.errors.ExceptionMessage;
 import com.example.app.events.OnRegistrationSuccessEvent;
+import com.example.app.events.ResetPasswordByEmailEvent;
+import com.example.app.models.token.ResetToken;
 import com.example.app.models.token.Token;
 import com.example.app.models.user.UserRepository;
 import com.example.app.models.user.User;
@@ -51,7 +54,7 @@ public class AuthenticationService {
 
         var     jwtToken            = jwtService.generateToken(user);
 
-        Token   verificationToken   = tokenService.findByUser(user);
+        Token   verificationToken   = tokenService.findByUser(user, "verification");
 
         return RegistrationResponse.builder()
                 .JWT(jwtToken)
@@ -76,23 +79,16 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse resetPassword(ResetPasswordRequest request) {
-        authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.email(),
-                        request.newPassword()
-                )
-        );
+    public ResetPasswordResponse provideEmail(String email, WebRequest request) {
+        User    user    = userService.findByEmail(email);
+        String  appUrl  = request.getContextPath();
 
-        User user = userService.findByEmail(request.email());
+        eventPublisher.publishEvent(new ResetPasswordByEmailEvent(user, request.getLocale(), appUrl));
 
-        user.setPassword(passwordEncoder.encode(request.newPassword()));
-        userService.save(user);
+        Token resetToken = tokenService.findByUser(user, "reset");
 
-        var jwtToken = jwtService.generateToken(user);
-
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
+        return ResetPasswordResponse.builder()
+                .resetToken(resetToken.getToken())
                 .build();
     }
 }

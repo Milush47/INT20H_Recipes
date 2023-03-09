@@ -1,12 +1,10 @@
 package com.example.app.controllers;
 
 import com.example.app.dto.requests.AuthenticationRequest;
+import com.example.app.dto.requests.EmailRequest;
 import com.example.app.dto.requests.RegisterRequest;
 import com.example.app.dto.requests.ResetPasswordRequest;
-import com.example.app.dto.responses.AuthenticationResponse;
-import com.example.app.dto.responses.RegistrationResponse;
-import com.example.app.dto.responses.SuccessResponse;
-import com.example.app.dto.responses.UserResponse;
+import com.example.app.dto.responses.*;
 import com.example.app.errors.InvalidTokenException;
 import com.example.app.models.user.User;
 import com.example.app.services.AuthenticationService;
@@ -15,6 +13,7 @@ import com.example.app.services.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -102,17 +101,39 @@ public class AuthenticationController {
         );
     }
 
-    // responsible for reset user's password (new password is provided by user)
-    @PostMapping("/reset-password")
-    public ResponseEntity<SuccessResponse> resetPassword(
-            @Valid @RequestBody ResetPasswordRequest request
+    @PostMapping("/provideEmail")
+    public ResponseEntity<SuccessResponse> provideEmail(
+            @RequestBody    EmailRequest emailRequest,
+                            WebRequest  request
     ) {
+
+        ResetPasswordResponse response = authService.provideEmail(emailRequest.email(), request);
+
+        return ResponseEntity.ok(
+                SuccessResponse.builder()
+                        .message("Reset token has been sent")
+                        .success(true)
+                        .data(response)
+                        .build()
+        );
+    }
+
+    // responsible for reset user's password (new password is provided by user)
+    @PostMapping("/resetPassword")
+    public ResponseEntity<SuccessResponse> resetPassword(
+            @Valid  @RequestBody                ResetPasswordRequest    request,
+                    @RequestParam("resetToken") String                  resetToken,
+                                                WebRequest              webRequest
+    ) {
+        User user = userService.getUserByJWT(webRequest);
+
+        UserResponse response = userService.completePasswordResetting(resetToken, user, request);
 
         return ResponseEntity.ok(
                 SuccessResponse.builder()
                         .message("Password is reset")
                         .success(true)
-                        .data(authService.resetPassword(request))
+                        .data(response)
                         .build()
         );
     }
