@@ -5,13 +5,10 @@ import com.example.app.models.token.VerificationToken;
 import com.example.app.models.user.User;
 import com.example.app.services.EmailService;
 import com.example.app.services.TokenService;
-import com.example.app.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -45,6 +42,6 @@ public class RegistrationEmailListener implements ApplicationListener<OnRegistra
 
         String text = message + "http://localhost:5173" + url;
 
-        emailService.sendRegistrationConfirmation(recipient, subject, text);
+        emailService.sendSimpleMessage(recipient, subject, text);
     }
 }
