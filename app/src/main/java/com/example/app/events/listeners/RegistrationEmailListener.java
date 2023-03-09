@@ -1,5 +1,6 @@
-package com.example.app.events;
+package com.example.app.events.listeners;
 
+import com.example.app.events.OnRegistrationSuccessEvent;
 import com.example.app.models.token.Token;
 import com.example.app.models.token.VerificationToken;
 import com.example.app.models.user.User;

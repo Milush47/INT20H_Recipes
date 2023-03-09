@@ -47,12 +47,8 @@ public class UserService implements UserDetailsService {
 
         String  email   = jwtService.extractUsername(token);
 
-        return  userRepository.findByEmail(email)
-                .orElseThrow(
-                        () -> new UsernameNotFoundException(
-                                String.format(ExceptionMessage.USER_NOT_FOUND, email)
-                        )
-                );
+        return findByEmail(email);
+
     }
 
     public void save(User user) {

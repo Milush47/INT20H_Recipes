@@ -3,16 +3,18 @@ package com.example.app.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class EmailService {
+public class EmailService{
     private final JavaMailSender                mailSender;
-    private final TokenService                  tokenService;
     private final UserService                   userService;
 
     // Method is used for verification email on registration step
+
+    @Async
     public void sendSimpleMessage(String recipient, String subject, String text){
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
@@ -26,6 +28,4 @@ public class EmailService {
     public boolean isEmailExists(String email) {
         return userService.isPresent(email);
     }
-
-
 }
