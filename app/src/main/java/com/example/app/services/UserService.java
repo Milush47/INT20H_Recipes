@@ -6,6 +6,7 @@ import com.example.app.dto.responses.UserResponse;
 import com.example.app.errors.ExceptionMessage;
 import com.example.app.errors.InvalidTokenException;
 import com.example.app.events.OnRegistrationSuccessEvent;
+import com.example.app.events.OnSuccessPasswordResettingEvent;
 import com.example.app.models.user.User;
 import com.example.app.models.user.UserRepository;
 import lombok.AllArgsConstructor;
@@ -117,11 +118,19 @@ public class UserService implements UserDetailsService {
         throw new InvalidTokenException("Verification token is invalid");
     }
 
-    public UserResponse completePasswordResetting(String token, User user, ResetPasswordRequest request) {
+    public UserResponse completePasswordResetting(
+            String                  token,
+            User                    user,
+            ResetPasswordRequest    request,
+            WebRequest              webRequest
+            ) {
         if(tokenService.isTokenValid(token, user)) {
             user.setPassword(passwordEncoder.encode(request.newPassword()));
 
             save(user);
+
+            String appUrl = webRequest.getContextPath();
+            eventPublisher.publishEvent(new OnSuccessPasswordResettingEvent(user, webRequest.getLocale(), appUrl));
 
             return mapToUserResponse(user);
         }
