@@ -1,5 +1,6 @@
 package com.example.app.events;
 
+import com.example.app.models.token.Token;
 import com.example.app.models.user.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,21 +10,18 @@ import java.util.Locale;
 
 @Getter
 @Setter
-public class ResetPasswordByEmailEvent extends ApplicationEvent {
-    private static final    Long    serialVersionUID = 1L;
-    private                 String  appUrl;
-    private                 Locale  locale;
-    private                 User    user;
+public class ResetPasswordByEmailEvent extends EmailEvent {
+    public ResetPasswordByEmailEvent(User user, Locale locale, String appUrl) {
+        super(user, locale, appUrl);
+    }
 
-    public ResetPasswordByEmailEvent(
-            User    user,
-            Locale  locale,
-            String  appUrl
-    ) {
-        super(user);
+    @Override
+    public String getSubject() {
+        return "Reset password";
+    }
 
-        this.user   = user;
-        this.locale = locale;
-        this.appUrl = appUrl;
+    @Override
+    public String getMessage() {
+        return "message.resetPasswordLink";
     }
 }

@@ -1,8 +1,10 @@
 package com.example.app.events.listeners;
 
+import com.example.app.events.OnRegistrationSuccessEvent;
 import com.example.app.events.ResetPasswordByEmailEvent;
 import com.example.app.models.token.ResetToken;
 import com.example.app.models.token.Token;
+import com.example.app.models.token.VerificationToken;
 import com.example.app.models.user.User;
 import com.example.app.services.EmailService;
 import com.example.app.services.TokenService;
@@ -11,36 +13,46 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
+import java.util.Locale;
+
 @Component
-@RequiredArgsConstructor
-public class ResetPasswordByEmailListener implements ApplicationListener<ResetPasswordByEmailEvent> {
-    private final TokenService  tokenService;
-    private final MessageSource messageSource;
-    private final EmailService  emailService;
+public class ResetPasswordByEmailListener extends EmailListener<ResetPasswordByEmailEvent> {
+
+    public ResetPasswordByEmailListener(
+            TokenService tokenService,
+            EmailService emailService,
+            MessageSource messageSource
+    ) {
+        super(tokenService, emailService, messageSource);
+    }
 
     @Override
-    public void onApplicationEvent(ResetPasswordByEmailEvent event) {this.resetPasswordConfirmation(event);}
+    protected String getRecipient(ResetPasswordByEmailEvent event) {
+        return event.getUser().getEmail();
+    }
 
-    public void resetPasswordConfirmation(ResetPasswordByEmailEvent event) {
-        User    user        =   event.getUser();
-        Token   resetToken  =   tokenService.createToken(user, ResetToken::new);
+    @Override
+    protected String getSubject(ResetPasswordByEmailEvent event) {
+        return event.getSubject();
+    }
 
-        String recipient    = user.getEmail();
-        String subject      = "Reset your password";
-        String url          = event.getAppUrl() +
-                "/auth"             +
-                "/resetPassword"    +
-                "?resetToken="      +
-                resetToken.getToken();
+    @Override
+    protected String getUrl(ResetPasswordByEmailEvent event) {
+        Token token = createToken(event.getUser(), ResetToken::new);
 
-        String message = messageSource.getMessage(
-                "message.resetPasswordLink",
-                null,
-                event.getLocale()
-        );
+        return "/auth"                  +
+                "/resetPassword"  +
+                "?resetToken="   +
+                token;
+    }
 
-        String text = message + "http://localhost:5173" + url;
+    @Override
+    protected Locale getLocale(ResetPasswordByEmailEvent event) {
+        return event.getLocale();
+    }
 
-        emailService.sendSimpleMessage(recipient, subject, text);
+    @Override
+    protected String getMessageKey(ResetPasswordByEmailEvent event) {
+        return event.getMessage();
     }
 }

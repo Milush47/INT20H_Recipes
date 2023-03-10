@@ -11,38 +11,45 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
-@Component
-@RequiredArgsConstructor
-public class RegistrationEmailListener implements ApplicationListener<OnRegistrationSuccessEvent> {
-    private final TokenService  tokenService;
-    private final EmailService  emailService;
-    private final MessageSource messageSource;
+import java.util.Locale;
 
-    @Override
-    public void onApplicationEvent(OnRegistrationSuccessEvent event) {
-        this.confirmRegistration(event);
+@Component
+public class RegistrationEmailListener extends EmailListener<OnRegistrationSuccessEvent> {
+    public RegistrationEmailListener(
+            TokenService tokenService,
+            EmailService emailService,
+            MessageSource messageSource
+    ) {
+        super(tokenService, emailService, messageSource);
     }
 
-    private void confirmRegistration(OnRegistrationSuccessEvent event) {
-        User    user                = event.getUser();
-        Token   verificationToken   = tokenService.createToken(user, VerificationToken::new);
+    @Override
+    protected String getRecipient(OnRegistrationSuccessEvent event) {
+        return event.getUser().getEmail();
+    }
 
-        String recipient    = user.getEmail();
-        String subject      = "Registration confirmation";
-        String url          = event.getAppUrl() +
-                "/auth"                 +
+    @Override
+    protected String getSubject(OnRegistrationSuccessEvent event) {
+        return event.getSubject();
+    }
+
+    @Override
+    protected String getUrl(OnRegistrationSuccessEvent event) {
+        Token token = createToken(event.getUser(), VerificationToken::new);
+
+        return "/auth"                  +
                 "/confirmRegistration"  +
                 "?verificationToken="   +
-                verificationToken.getToken();
+                token;
+    }
 
-        String message = messageSource.getMessage(
-                "message.registrationSuccessConfirmationLink",
-                null,
-                event.getLocale()
-        );
+    @Override
+    protected Locale getLocale(OnRegistrationSuccessEvent event) {
+        return event.getLocale();
+    }
 
-        String text = message + "http://localhost:5173" + url;
-
-        emailService.sendSimpleMessage(recipient, subject, text);
+    @Override
+    protected String getMessageKey(OnRegistrationSuccessEvent event) {
+        return event.getMessage();
     }
 }
