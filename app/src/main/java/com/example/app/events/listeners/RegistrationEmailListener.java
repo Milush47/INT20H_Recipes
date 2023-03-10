@@ -16,9 +16,9 @@ import java.util.Locale;
 @Component
 public class RegistrationEmailListener extends EmailListener<OnRegistrationSuccessEvent> {
     public RegistrationEmailListener(
-            TokenService tokenService,
-            EmailService emailService,
-            MessageSource messageSource
+            TokenService    tokenService,
+            EmailService    emailService,
+            MessageSource   messageSource
     ) {
         super(tokenService, emailService, messageSource);
     }
@@ -40,7 +40,7 @@ public class RegistrationEmailListener extends EmailListener<OnRegistrationSucce
         return "/auth"                  +
                 "/confirmRegistration"  +
                 "?verificationToken="   +
-                token;
+                token.getToken();
     }
 
     @Override

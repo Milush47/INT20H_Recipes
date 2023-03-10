@@ -5,12 +5,14 @@ import com.example.app.models.token.TokenFactory;
 import com.example.app.models.user.User;
 import com.example.app.services.EmailService;
 import com.example.app.services.TokenService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Locale;
 
 @RequiredArgsConstructor
@@ -28,10 +30,14 @@ public abstract class EmailListener<T extends ApplicationEvent> implements Appli
 
     @Override
     public void onApplicationEvent(T event) {
-        this.sendEmail(event);
+        try {
+            this.sendEmail(event);
+        } catch (MessagingException | IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    protected void sendEmail(T event) {
+    protected void sendEmail(T event) throws MessagingException, IOException {
         String recipient    =   getRecipient(event);
         String subject      =   getSubject(event);
         String url          =   getUrl(event);

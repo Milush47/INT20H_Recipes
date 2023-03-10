@@ -11,7 +11,11 @@ import java.util.Locale;
 @Getter
 @Setter
 public class OnRegistrationSuccessEvent extends EmailEvent {
-    public OnRegistrationSuccessEvent(User user, Locale locale, String appUrl) {
+    public OnRegistrationSuccessEvent(
+            User    user,
+            Locale  locale,
+            String  appUrl
+    ) {
         super(user, locale, appUrl);
     }
 

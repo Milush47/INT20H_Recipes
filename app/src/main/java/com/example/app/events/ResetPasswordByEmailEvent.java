@@ -11,7 +11,11 @@ import java.util.Locale;
 @Getter
 @Setter
 public class ResetPasswordByEmailEvent extends EmailEvent {
-    public ResetPasswordByEmailEvent(User user, Locale locale, String appUrl) {
+    public ResetPasswordByEmailEvent(
+            User    user,
+            Locale  locale,
+            String  appUrl
+    ) {
         super(user, locale, appUrl);
     }
 

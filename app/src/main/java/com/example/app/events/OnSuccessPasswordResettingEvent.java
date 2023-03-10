@@ -10,7 +10,11 @@ import java.util.Locale;
 @Getter
 @Setter
 public class OnSuccessPasswordResettingEvent extends EmailEvent {
-    public OnSuccessPasswordResettingEvent(User user, Locale locale, String appUrl) {
+    public OnSuccessPasswordResettingEvent(
+            User    user,
+            Locale  locale,
+            String  appUrl
+    ) {
         super(user, locale, appUrl);
     }
 

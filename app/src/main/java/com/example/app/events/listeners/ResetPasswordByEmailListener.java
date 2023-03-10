@@ -19,9 +19,9 @@ import java.util.Locale;
 public class ResetPasswordByEmailListener extends EmailListener<ResetPasswordByEmailEvent> {
 
     public ResetPasswordByEmailListener(
-            TokenService tokenService,
-            EmailService emailService,
-            MessageSource messageSource
+            TokenService    tokenService,
+            EmailService    emailService,
+            MessageSource   messageSource
     ) {
         super(tokenService, emailService, messageSource);
     }
@@ -40,10 +40,10 @@ public class ResetPasswordByEmailListener extends EmailListener<ResetPasswordByE
     protected String getUrl(ResetPasswordByEmailEvent event) {
         Token token = createToken(event.getUser(), ResetToken::new);
 
-        return "/auth"                  +
-                "/resetPassword"  +
-                "?resetToken="   +
-                token;
+        return "/auth"              +
+                "/resetPassword"    +
+                "?resetToken="      +
+                token.getToken();
     }
 
     @Override

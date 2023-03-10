@@ -127,7 +127,12 @@ public class AuthenticationController {
     ) {
         User user = userService.getUserByJWT(webRequest);
 
-        UserResponse response = userService.completePasswordResetting(resetToken, user, request);
+        UserResponse response = userService.completePasswordResetting(
+                resetToken,
+                user,
+                request,
+                webRequest
+        );
 
         return ResponseEntity.ok(
                 SuccessResponse.builder()

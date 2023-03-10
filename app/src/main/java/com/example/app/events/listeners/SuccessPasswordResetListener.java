@@ -21,9 +21,9 @@ import java.util.Locale;
 public class SuccessPasswordResetListener extends EmailListener<OnSuccessPasswordResettingEvent> {
 
     public SuccessPasswordResetListener(
-            TokenService tokenService,
-            EmailService emailService,
-            MessageSource messageSource
+            TokenService    tokenService,
+            EmailService    emailService,
+            MessageSource   messageSource
     ) {
         super(tokenService, emailService, messageSource);
     }
