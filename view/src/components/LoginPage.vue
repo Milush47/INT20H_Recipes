@@ -1,39 +1,41 @@
 <template>
   <form @submit.prevent="submit">
     <div>
+      <h2>Sign in</h2>
+      <!-- <p v-if="!isLoggedIn">Please login to access your profile.</p> -->
       <label for="email">Email:</label>
       <input
-        type="email"
         id="email"
+        type="email"
         v-model="email"
-        :class="{ 'is-invalid': !isValidEmail, }"
-        required
+        @input="validateEmail"
+        :class="{ invalid: errors.emailError }"
       />
-      <div class="invalid-feedback" v-if="!isValidEmail">
-        Please enter a valid email address.
-      </div>
+      <span class="error" v-if="errors.emailError">{{
+        errors.emailError
+      }}</span>
     </div>
     <div>
       <label for="password">Password:</label>
       <input
-        type="password"
         id="password"
+        type="password"
         v-model="password"
-        :class="{ 'is-invalid': !isValidPassword }"
-        required
+        @input="validatePassword"
+        :class="{ invalid: errors.passwordError }"
       />
-      <div class="invalid-feedback" v-if="!isValidPassword">
-        Password must be at least 8 characters long.
-      </div>
+      <span class="error" v-if="errors.passwordError">{{
+        errors.passwordError
+      }}</span>
     </div>
-    <button type="submit" :disabled="!isValidEmail || !isValidPassword">
+    <button type="submit" :disabled="!isFormValid">
       Sign in
     </button>
   </form>
 </template>
 
 <script>
-import { userService } from "../service/userService.js";
+import userService from "../service/userService.js";
 import axios from "axios";
 
 export default {
@@ -41,19 +43,19 @@ export default {
     return {
       email: "",
       password: "",
+      errors: {
+        emailError: "",
+        passwordError: "",
+      },
+      // isLoggedIn: false,
     };
   },
   computed: {
-    isValidEmail() {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(this.email);
-    },
-    isValidPassword() {
-      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%_^&*])(?=.{8,})/;
-      return passwordRegex.test(this.password);
-    },
-    isExistEmail() {
-      
+    isFormValid() {
+      return (
+        this.email !== "" &&
+        this.password !== ""
+      );
     }
   },
   methods: {
@@ -65,7 +67,9 @@ export default {
       userService
         .login(request)
         .then((response) => {
-          this.$router.push('/profile')
+          // this.isLoggedIn = true;
+          // isLoggedIn ? this.$router.push('/profile') : this.$router.push('/auth/authenticate');
+
         })
         .catch((error) => {
           if (error.response && error.response.status === 409) {
@@ -75,16 +79,44 @@ export default {
               "Sign in failed. Please try again later.";
           }
         });
+
+        this.$router.push("/profile");
+    },
+
+    validateEmail() {
+      const email = this.email;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!email) {
+        this.errors.emailError = "Email is required";
+      } else if (!emailRegex.test(email)) {
+        this.errors.emailError = "Invalid email format";
+      } else {
+        this.errors.emailError = "";
+      }
+    },
+
+    validatePassword() {
+      const password = this.password;
+
+      if (!password) {
+        this.errors.passwordError = "Password is required";
+      } else if (password.length < 8) {
+        this.errors.passwordError = "Password must be at least 8 characters long";
+      } else {
+        this.errors.passwordError = "";
+      }
     },
   },
 };
 </script>
 
 <style>
-.is-invalid {
-  border: 1px solid red;
+span {
+  display: block;
+  margin: 5px 0;
 }
-.invalid-feedback {
+.error {
   color: red;
 }
 </style>

@@ -10,8 +10,9 @@
 </template>
 
 <script>
-import { userService } from "../service/userService.js";
+import userService from "../service/userService.js";
 import axios from "axios";
+import setAuthHeader from "../service/setAuthHeader.js";
 
 export default {
   name: "Profile",
@@ -23,21 +24,21 @@ export default {
         email: "",
         preferences: "",
       },
+
+      errors: {
+        error: "",
+      }
     };
   },
   mounted() {
-    this.fetchUserData();
+    userService.getCurrentUser();
+
+    const user = localStorage.getItem("user");
+
+    this.userData = JSON.parse(user);
   },
 
   methods: {
-    async fetchUserData() {
-      try {
-        userService.getCurrentUser();
-        this.userData = response.data.data;
-      } catch (error) {
-        this.error = error.message;
-      }
-    },
     logout() {
       userService.logout();
       this.$router.push("/auth/authenticate");

@@ -1,19 +1,22 @@
-import axios from 'axios';
+import axios from "axios";
 import setAuthHeader from "./setAuthHeader";
 
 const BASE_URL = "http://localhost:8080";
 
-export const userService = {
+const userService = {
   login: async function (request) {
     try {
+      //setAuthHeader(localStorage.getItem("token"));
+
       const response = await axios.post(
         `${BASE_URL}/auth/authenticate`,
         request
       );
-      const token = response.data.data.token;
+
+      const token = response.data.data.JWT;
       localStorage.setItem("token", token);
 
-      setAuthHeader(token);
+      localStorage.setItem("user", JSON.stringify(response.data.data.user));
     } catch (error) {
       console.error(error);
       throw new Error(error.response.message);
@@ -21,17 +24,17 @@ export const userService = {
   },
 
   logout: async function () {
-    localStorage.removeItem("token");
+    localStorage.clear();
   },
 
   getCurrentUser: async function () {
     try {
-      const response = await axios.get(
-        `${BASE_URL}/profile`
-      );
+      const response = localStorage.getItem("token");
+
       return response.data;
     } catch (error) {
       console.error(error);
+
       throw new Error(error.response.message);
     }
   },
@@ -43,13 +46,62 @@ export const userService = {
         registerRequest
       );
 
-      const token = response.data.data.token;
-      localStorage.setItem("token", token);
+      localStorage.setItem("token", response.data.data.JWT);
 
-      setAuthHeader(token);
+      const verificationToken = response.data.data.verificationToken;
+      localStorage.setItem("verificationToken", verificationToken);
+    } catch (error) {
+      console.error(error.response.message);
+      throw new Error(error.response.message);
+    }
+  },
+
+  confirmRegistration: async function (verificationToken) {
+    try {
+      const JWT = localStorage.getItem("token");
+
+      setAuthHeader(JWT);
+
+      const response = await axios.post(
+        `${BASE_URL}/auth/confirmRegistration/${verificationToken}`
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw new Error(error.response.message);
+    }
+  },
+
+  // verifyEmail: async function (verificationToken) {
+  //   try {
+  //     const response = await axios.post(`${BASE_URL}/auth/confirmRegistration`, {
+  //       params: {
+  //         verificationToken: verificationToken,
+  //       },
+
+  //     });
+
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error(error);
+  //     throw new Error(error.response.message);
+  //   }
+  // },
+
+  verifyEmail: async function (verificationToken) {
+    try {
+      setAuthHeader(localStorage.getItem("token"));
+
+      const response = await axios.post(
+        `${BASE_URL}/auth/confirmRegistration?verificationToken=${verificationToken}`
+      );
+      return response.data;
     } catch (error) {
       console.error(error);
       throw new Error(error.response.message);
     }
   },
 };
+
+export default userService;

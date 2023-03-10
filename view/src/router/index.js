@@ -8,6 +8,10 @@ import Register from "@/components/RegisterPage.vue";
 import MyProducts from "@/components/MyProducts.vue";
 import MyRecipes from "@/components/MyRecipes.vue";
 import CreateRecipe from "@/components/CreateRecipe.vue";
+import ConfirmRegister from "@/components/ConfirmRegisterPage.vue";
+import SendLink from "@/components/SendLinkPage.vue"
+
+import auth from "../service/auth"
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +30,7 @@ const router = createRouter({
             path: "/profile",
             name: "Profile",
             component: Profile,
+            beforeEnter: auth,
         },
         {
             path: "/auth/authenticate",
@@ -51,6 +56,17 @@ const router = createRouter({
             path: "/create-recipe",
             name: "CreateRecipe",
             component: CreateRecipe,
+        },
+        {
+            path: "/sendLink",
+            name: "SendLink",
+            component: SendLink,
+        },
+        {
+            path: "/auth/confirmRegistration",
+            params: { verificationToken: String },
+            name: "ConfirmRegister",
+            component: ConfirmRegister,
         }
     ],
 })
