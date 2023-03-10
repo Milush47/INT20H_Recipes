@@ -50,7 +50,7 @@ public abstract class EmailListener<T extends ApplicationEvent> implements Appli
 
         String text = message + "http://localhost:5173" + url;
 
-        emailService.sendSimpleMessage(recipient, subject, text);
+        emailService.sendMessage(recipient, subject, text);
     }
 
     protected Token createToken(User user, TokenFactory<Token> tokenTokenFactory) {

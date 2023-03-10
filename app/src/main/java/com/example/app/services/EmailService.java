@@ -1,8 +1,10 @@
 package com.example.app.services;
 
+import com.sun.jdi.InternalException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -15,44 +17,55 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
+import java.util.Arrays;
 
 @Service
 @RequiredArgsConstructor
 public class EmailService{
-    private final JavaMailSender                mailSender;
-    private final UserService                   userService;
+    private         final JavaMailSender    mailSender;
+    private         final UserService       userService;
+    private static  final String            TEMPLATE;
 
-    // Method is used for verification email on registration step
+    static {
+        try (
+                InputStream inputStream = EmailService.class
+                        .getClassLoader()
+                        .getResourceAsStream("my-email-template.html")
+        ) {
+            assert inputStream != null;
+
+            TEMPLATE = new String(inputStream.readAllBytes());
+
+        } catch (IOException ex) {
+            throw new InternalException(
+                    ex.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value()
+            );
+        }
+    }
 
     @Async
-    public void sendSimpleMessage(
+    public void sendMessage(
             String recipient,
             String subject,
             String text
-    ) throws MessagingException, IOException {
+    ) throws MessagingException {
 
-        InputStream inputStream = getClass()
-                .getClassLoader()
-                .getResourceAsStream("my-email-template.html");
+        MimeMessage         message = mailSender.createMimeMessage();
+        MimeMessageHelper   helper  = new MimeMessageHelper(message, true);
 
-        assert inputStream != null;
-
-        String content = MessageFormat.format(
-                new String(inputStream.readAllBytes()),
-                text
-        );
-
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setTo(recipient);
         helper.setSubject(subject);
-        helper.setText(content, true);
-
+        helper.setText(processTemplate(text), true);
 
         mailSender.send(message);
     }
 
     public boolean isEmailExists(String email) {
         return userService.isPresent(email);
+    }
+
+    private String processTemplate(String text) {
+        return MessageFormat.format(TEMPLATE, text);
     }
 }

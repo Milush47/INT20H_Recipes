@@ -13,6 +13,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+
+
 
 import static com.example.app.errors.ExceptionMessage.USER_NOT_FOUND;
 
@@ -48,8 +52,6 @@ public class ApplicationConfig implements WebMvcConfigurer {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 
 //
 //    @Bean
