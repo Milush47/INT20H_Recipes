@@ -55,4 +55,9 @@ public class ResetPasswordByEmailListener extends EmailListener<ResetPasswordByE
     protected String getMessageKey(ResetPasswordByEmailEvent event) {
         return event.getMessage();
     }
+
+    @Override
+    protected String getUserName(ResetPasswordByEmailEvent event) {
+        return event.getUser().getFirstname();
+    }
 }

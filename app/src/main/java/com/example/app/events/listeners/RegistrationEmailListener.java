@@ -52,4 +52,9 @@ public class RegistrationEmailListener extends EmailListener<OnRegistrationSucce
     protected String getMessageKey(OnRegistrationSuccessEvent event) {
         return event.getMessage();
     }
+
+    @Override
+    protected String getUserName(OnRegistrationSuccessEvent event) {
+        return event.getUser().getFirstname();
+    }
 }

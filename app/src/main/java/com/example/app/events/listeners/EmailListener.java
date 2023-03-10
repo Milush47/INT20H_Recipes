@@ -13,6 +13,9 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 @RequiredArgsConstructor
@@ -27,6 +30,7 @@ public abstract class EmailListener<T extends ApplicationEvent> implements Appli
     protected abstract String getUrl        (T event);
     protected abstract Locale getLocale     (T event);
     protected abstract String getMessageKey (T event);
+    protected abstract String getUserName   (T event);
 
     @Override
     public void onApplicationEvent(T event) {
@@ -48,7 +52,10 @@ public abstract class EmailListener<T extends ApplicationEvent> implements Appli
                 getLocale(event)
                 );
 
-        String text = message + "http://localhost:5173" + url;
+        String[] text = new String[2];
+
+        text[0] =  getUserName(event);
+        text[1] = "http://localhost:5173" + url;
 
         emailService.sendMessage(recipient, subject, text);
     }

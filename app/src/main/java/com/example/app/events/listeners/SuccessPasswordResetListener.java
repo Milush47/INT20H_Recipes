@@ -54,4 +54,9 @@ public class SuccessPasswordResetListener extends EmailListener<OnSuccessPasswor
     protected String getMessageKey(OnSuccessPasswordResettingEvent event) {
         return event.getMessage();
     }
+
+    @Override
+    protected String getUserName(OnSuccessPasswordResettingEvent event) {
+        return event.getUser().getFirstname();
+    }
 }

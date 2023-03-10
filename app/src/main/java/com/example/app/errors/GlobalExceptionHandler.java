@@ -79,18 +79,18 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
-    @ExceptionHandler(InvalidTokenException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorMessage handleInvalidVerificationToken(
-            InvalidTokenException ex,
-            WebRequest                          request
-    ) {
-
-        return ErrorMessage.builder()
-                .statusCode(HttpStatus.BAD_REQUEST.value())
-                .timeStamp(new Date())
-                .message(ex.getMessage())
-                .description(request.getDescription(false))
-                .build();
-    }
+//    @ExceptionHandler(InvalidTokenException.class)
+//    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+//    public ErrorMessage handleInvalidVerificationToken(
+//            InvalidTokenException   ex,
+//            WebRequest              request
+//    ) {
+//
+//        return ErrorMessage.builder()
+//                .statusCode(HttpStatus.BAD_REQUEST.value())
+//                .timeStamp(new Date())
+//                .message(ex.getMessage())
+//                .description(request.getDescription(false))
+//                .build();
+//    }
 }

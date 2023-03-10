@@ -37,11 +37,9 @@ public class AsyncConfig implements AsyncConfigurer {
     private static class CustomAsyncExceptionHandler implements AsyncUncaughtExceptionHandler {
         @Override
         public void handleUncaughtException(Throwable ex, Method method, Object... params) {
-            System.err.println("Async task threw an exception: " + ex.getMessage());
-
             // Return an internal server error response to the client-side
             throw new InternalException(
-                    ex.getMessage(),
+                    "Server error during execution server-side function",
                     HttpStatus.INTERNAL_SERVER_ERROR.value()
             );
         }
