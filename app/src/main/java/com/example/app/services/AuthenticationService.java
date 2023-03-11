@@ -4,10 +4,8 @@ import com.example.app.dto.requests.AuthenticationRequest;
 import com.example.app.dto.requests.RegisterRequest;
 import com.example.app.dto.responses.AuthenticationResponse;
 import com.example.app.dto.responses.RegistrationResponse;
-import com.example.app.dto.responses.ResetPasswordResponse;
 import com.example.app.events.OnRegistrationSuccessEvent;
 import com.example.app.events.ResetPasswordByEmailEvent;
-import com.example.app.models.token.Token;
 import com.example.app.models.user.User;
 import com.example.app.models.user.Role;
 import lombok.AllArgsConstructor;
@@ -49,11 +47,8 @@ public class AuthenticationService {
 
         var     jwtToken            = jwtService.generateToken(user);
 
-        Token   verificationToken   = tokenService.findByUser(user, "verification");
-
         return RegistrationResponse.builder()
                 .JWT(jwtToken)
-                .verificationToken(verificationToken.getToken())
                 .build();
     }
 
@@ -74,16 +69,10 @@ public class AuthenticationService {
                 .build();
     }
 
-    public ResetPasswordResponse provideEmail(String email, WebRequest request) {
+    public void provideEmail(String email, WebRequest request) {
         User    user    = userService.findByEmail(email);
         String  appUrl  = request.getContextPath();
 
         eventPublisher.publishEvent(new ResetPasswordByEmailEvent(user, request.getLocale(), appUrl));
-
-        Token resetToken = tokenService.findByUser(user, "reset");
-
-        return ResetPasswordResponse.builder()
-                .resetToken(resetToken.getToken())
-                .build();
     }
 }

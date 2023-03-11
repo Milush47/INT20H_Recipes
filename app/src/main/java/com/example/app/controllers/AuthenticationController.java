@@ -13,7 +13,6 @@ import com.example.app.services.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -107,13 +106,12 @@ public class AuthenticationController {
                             WebRequest  request
     ) {
 
-        ResetPasswordResponse response = authService.provideEmail(emailRequest.email(), request);
+        authService.provideEmail(emailRequest.email(), request);
 
         return ResponseEntity.ok(
                 SuccessResponse.builder()
-                        .message("Reset token has been sent")
+                        .message("Reset message has been sent")
                         .success(true)
-                        .data(response)
                         .build()
         );
     }
