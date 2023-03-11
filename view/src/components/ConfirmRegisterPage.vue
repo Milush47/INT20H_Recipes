@@ -7,7 +7,6 @@
 
 <script>
 import userService from "../service/userService.js";
-import setAuthHeader from "../service/setAuthHeader.js";
 
 export default {
     name: "ConfirmRegister",

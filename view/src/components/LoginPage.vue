@@ -31,6 +31,7 @@
     <button type="submit" :disabled="!isFormValid">
       Sign in
     </button>
+    <p>Forgot your password?</p><RouterLink to="/auth/provideEmail">Try this</RouterLink>
   </form>
 </template>
 

@@ -6,8 +6,6 @@ const BASE_URL = "http://localhost:8080";
 const userService = {
   login: async function (request) {
     try {
-      //setAuthHeader(localStorage.getItem("token"));
-
       const response = await axios.post(
         `${BASE_URL}/auth/authenticate`,
         request
@@ -96,6 +94,34 @@ const userService = {
       const response = await axios.post(
         `${BASE_URL}/auth/confirmRegistration?verificationToken=${verificationToken}`
       );
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw new Error(error.response.message);
+    }
+  },
+
+  resetPassword: async function (resetPasswordRequest) {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/auth/resetPassword`,
+        resetPasswordRequest
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw new Error(error.response.message);
+    }
+  },
+
+  provideEmail: async function (emailRequest) {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/auth/provideEmail`,
+        JSON.stringify(emailRequest)
+      );
+
       return response.data;
     } catch (error) {
       console.error(error);

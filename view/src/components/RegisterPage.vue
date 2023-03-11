@@ -127,7 +127,8 @@ export default {
         this.errors.passwordSymbolError === "" &&
         this.errors.passwordLowercaseLetterError === "" &&
         this.errors.passwordUppercaseLetterError === "" &&
-        this.confirmedPassword !== ""
+        this.confirmedPassword !== "" &&
+        this.errors.confirmedPasswordError === ""
       );
     },
   },

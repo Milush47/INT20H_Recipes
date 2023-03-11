@@ -11,8 +11,6 @@
 
 <script>
 import userService from "../service/userService.js";
-import axios from "axios";
-import setAuthHeader from "../service/setAuthHeader.js";
 
 export default {
   name: "Profile",

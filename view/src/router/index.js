@@ -10,6 +10,8 @@ import MyRecipes from "@/components/MyRecipes.vue";
 import CreateRecipe from "@/components/CreateRecipe.vue";
 import ConfirmRegister from "@/components/ConfirmRegisterPage.vue";
 import SendLink from "@/components/SendLinkPage.vue"
+import ResetPasswordPage from "@/components/ResetPasswordPage.vue"
+import ResetPasswordEmail from "@/components/ResetPasswordEmail.vue"
 
 import auth from "../service/auth"
 
@@ -67,6 +69,17 @@ const router = createRouter({
             params: { verificationToken: String },
             name: "ConfirmRegister",
             component: ConfirmRegister,
+        },
+        {
+            path: "/auth/provideEmail",
+            name: "ResetPasswordEmail",
+            component: ResetPasswordEmail,
+        },
+        {
+            path: "/auth/resetPassword",
+            params: { resetToken: String },
+            name: "ResetPasswordPage",
+            component: ResetPasswordPage,
         }
     ],
 })
