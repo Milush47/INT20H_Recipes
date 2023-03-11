@@ -1,5 +1,8 @@
 package com.example.app.services;
 
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheFactory;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -8,37 +11,29 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.MessageFormat;
+import javax.servlet.ServletException;
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class EmailService{
-    private         final JavaMailSender    mailSender;
-    private         final UserService       userService;
-    private static  final String            TEMPLATE;
+    private         final   JavaMailSender      mailSender;
+    private         final   UserService         userService;
+    private static          Mustache            mustache;
 
     static {
-        try (
-                InputStream inputStream = EmailService.class
-                        .getClassLoader()
-                        .getResourceAsStream("my-email-template.html")
-        ) {
-            assert inputStream != null;
-
-            TEMPLATE = new String(inputStream.readAllBytes());
-
-        } catch (IOException ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
+        MustacheFactory mf = new DefaultMustacheFactory();
+        mustache = mf.compile("email-template.mustache");
     }
 
     @Async
     public void sendMessage(
             String recipient,
             String subject,
-            String[] text
-    ) throws MessagingException {
+            Map<String, String> text
+    ) throws MessagingException, IOException, ServletException {
 
         MimeMessage         message = mailSender.createMimeMessage();
         MimeMessageHelper   helper  = new MimeMessageHelper(message, true);
@@ -54,7 +49,16 @@ public class EmailService{
         return userService.isPresent(email);
     }
 
-    private String processTemplate(String[] text) {
-        return MessageFormat.format(TEMPLATE, text[0], text[1]);
+    private String processTemplate(Map<String, String> text) throws ServletException, IOException {
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("name", text.get("userName"));
+        data.put("buttonLink", text.get("url"));
+        data.put("message", text.get("message"));
+        data.put("subject", text.get("subject"));
+
+        StringWriter stringWriter = new StringWriter();
+        mustache.execute(new PrintWriter(stringWriter), data).flush();
+        return stringWriter.toString();
     }
 }

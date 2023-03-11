@@ -12,11 +12,9 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.ServletException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @RequiredArgsConstructor
 public abstract class EmailListener<T extends ApplicationEvent> implements ApplicationListener<T> {
@@ -36,15 +34,14 @@ public abstract class EmailListener<T extends ApplicationEvent> implements Appli
     public void onApplicationEvent(T event) {
         try {
             this.sendEmail(event);
-        } catch (MessagingException | IOException e) {
+        } catch (MessagingException | IOException | ServletException e) {
             throw new RuntimeException(e);
         }
     }
 
-    protected void sendEmail(T event) throws MessagingException, IOException {
-        String recipient    =   getRecipient(event);
+    protected void sendEmail(T event) throws MessagingException, IOException, ServletException {
+        String recipient    = getRecipient(event);
         String subject      =   getSubject(event);
-        String url          =   getUrl(event);
 
         String message = messageSource.getMessage(
                 getMessageKey(event),
@@ -52,16 +49,29 @@ public abstract class EmailListener<T extends ApplicationEvent> implements Appli
                 getLocale(event)
                 );
 
-        String[] text = new String[2];
-
-        text[0] =  getUserName(event);
-        text[1] = "http://localhost:5173" + url;
+        Map<String, String> text = generateText(event, message, subject);
 
         emailService.sendMessage(recipient, subject, text);
     }
 
     protected Token createToken(User user, TokenFactory<Token> tokenTokenFactory) {
         return tokenService.createToken(user, tokenTokenFactory);
+    }
+
+    private Map<String, String> generateText(
+            T       event,
+            String  message,
+            String  subject
+    ) {
+        Map<String, String> text = new HashMap<>(4);
+
+        text.put("userName", getUserName(event));
+        text.put("url", "http://localhost:5173" + getUrl(event));
+        text.put("message", message);
+        text.put("subject", subject);
+
+
+        return text;
     }
 
 }
