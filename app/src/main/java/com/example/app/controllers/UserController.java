@@ -41,7 +41,7 @@ public class UserController {
         );
     }
 
-    @PutMapping()
+    @PutMapping
     public ResponseEntity<Void> uploadImage(
             @RequestParam("imagePath")  MultipartFile   image,
                                         WebRequest      request
