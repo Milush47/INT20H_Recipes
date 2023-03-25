@@ -44,8 +44,10 @@ public class UserController {
     @PutMapping
     public ResponseEntity<?> uploadImage(
             @RequestParam("imagePath")  MultipartFile   image,
-            @RequestParam("user")       User            user
+                                        WebRequest      request
     ) {
+        User user = userService.getUserByJWT(request);
+
         try {
             storageService.uploadImage(image, user);
 
