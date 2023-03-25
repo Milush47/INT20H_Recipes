@@ -53,7 +53,7 @@ public class UserController {
         }catch (InternalError e) {
             return ResponseEntity.status(
                     HttpStatus.INTERNAL_SERVER_ERROR
-            ).build();
+            ).body("Failed to upload avatar: " + e.getMessage());
         }
     }
 
