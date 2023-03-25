@@ -23,14 +23,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf()
-                .disable()
+                .cors().and() // Add this line to enable CORS configuration
+                .csrf().disable()
                 .exceptionHandling()
                 .authenticationEntryPoint(authEntryPointJWT)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/", "/auth/**").permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow all OPTIONS requests without authentication
+                .requestMatchers("/", "/auth/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -49,3 +49,9 @@ public class SecurityConfig {
         return http.build();
     }
 }
+
+
+
+
+
+
