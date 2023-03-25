@@ -47,6 +47,7 @@ public class UserController {
                                         WebRequest      request
     ) {
         User user = userService.getUserByJWT(request);
+
         try {
             storageService.uploadImage(image, user);
 
