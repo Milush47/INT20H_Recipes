@@ -7,15 +7,12 @@ import com.example.app.models.user.User;
 import com.example.app.models.user.UserRepository;
 import com.example.app.services.StorageService;
 import com.example.app.services.UserService;
-import jdk.jshell.spi.ExecutionControl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/profile")
@@ -41,21 +38,20 @@ public class UserController {
         );
     }
 
-    @PutMapping
-    public ResponseEntity<?> uploadImage(
+    @PutMapping()
+    public ResponseEntity<Void> uploadImage(
             @RequestParam("imagePath")  MultipartFile   image,
-                                        WebRequest      request
+            @RequestParam("user")       UserResponse    userRequest
     ) {
-        User user = userService.getUserByJWT(request);
+        User user = userService.findByEmail(userRequest.email());
 
         try {
             storageService.uploadImage(image, user);
 
+
             return ResponseEntity.ok().build();
-        }catch (InternalError e) {
-            return ResponseEntity.status(
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            ).body("Failed to upload avatar: " + e.getMessage());
+        } catch (InternalError e) {
+            return ResponseEntity.internalServerError().build();
         }
     }
 
