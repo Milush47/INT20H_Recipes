@@ -45,8 +45,8 @@ public class EmailService{
 
     @Async
     public void sendMessage(
-            String recipient,
-            String subject,
+            String              recipient,
+            String              subject,
             Map<String, String> text
     ) throws MessagingException, IOException, ServletException {
 
@@ -72,7 +72,7 @@ public class EmailService{
         data.put("buttonLink",  text.get("url"));
         data.put("message",     text.get("message"));
         data.put("subject",     text.get("subject"));
-        data.put("logo",        "cid:logo");
+        //data.put("logo", logoResource);
 
         StringWriter stringWriter = new StringWriter();
         mustache.execute(new PrintWriter(stringWriter), data).flush();

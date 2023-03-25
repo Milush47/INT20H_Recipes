@@ -12,19 +12,31 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class StorageService {
     private final UserRepository userRepository;
+    private final Path avatarPath = Paths.get("avatars");
 
-    public void uploadImage(MultipartFile image, User user) {
+    public void uploadImage(
+            MultipartFile   image,
+            User            user
+    ) {
         try(InputStream is = image.getInputStream()) {
-            Path filePath = Paths.get("avatar", image.getOriginalFilename());
 
-            Files.copy(is, filePath, StandardCopyOption.REPLACE_EXISTING);
+            if (!Files.exists(avatarPath)) {
+                Files.createDirectories(avatarPath);
+            }
 
-            user.setAvatarUrl(filePath.toString());
+            Path destination = avatarPath.resolve(Objects.requireNonNull(
+                    image.getOriginalFilename()
+            ));
+
+            Files.copy(image.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+
+            user.setAvatarUrl(image.toString());
 
             userRepository.save(user);
 

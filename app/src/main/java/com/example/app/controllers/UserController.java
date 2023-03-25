@@ -7,11 +7,15 @@ import com.example.app.models.user.User;
 import com.example.app.models.user.UserRepository;
 import com.example.app.services.StorageService;
 import com.example.app.services.UserService;
+import jdk.jshell.spi.ExecutionControl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/profile")
@@ -37,16 +41,21 @@ public class UserController {
         );
     }
 
-    @PostMapping("/upload/{id}")
+    @PutMapping()
     public ResponseEntity<Void> uploadImage(
             @RequestParam("imagePath")  MultipartFile   image,
                                         WebRequest      request
     ) {
         User user = userService.getUserByJWT(request);
+        try {
+            storageService.uploadImage(image, user);
 
-        storageService.uploadImage(image, user);
-
-        return ResponseEntity.ok().build();
+            return ResponseEntity.ok().build();
+        }catch (InternalError e) {
+            return ResponseEntity.status(
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            ).build();
+        }
     }
 
     @PutMapping("/update/{id}")
