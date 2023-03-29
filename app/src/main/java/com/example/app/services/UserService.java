@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequest;
 
+import java.io.IOException;
 import java.util.Objects;
 
 @AllArgsConstructor
@@ -73,7 +74,7 @@ public class UserService implements UserDetailsService {
             User        user,
             UserRequest userRequest,
             WebRequest  request
-    ) {
+    ) throws IOException {
         if(!userRequest.firstname().isEmpty()) {
             user.setFirstname(userRequest.firstname());
         }
