@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/profile")
 @RequiredArgsConstructor
@@ -48,9 +50,8 @@ public class UserController {
         try {
             storageService.uploadImage(image, user);
 
-
             return ResponseEntity.ok().build();
-        } catch (InternalError e) {
+        } catch (IOException | IllegalArgumentException e) {
             return ResponseEntity.internalServerError().build();
         }
     }

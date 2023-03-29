@@ -52,8 +52,8 @@ public class User implements UserDetails {
     @Column(name = "enabled")
     private Boolean enabled;
 
-    @Column(name = "avatarUrl")
-    private String avatarUrl;
+    @Column(name = "avatarPath")
+    private String avatarPath;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
