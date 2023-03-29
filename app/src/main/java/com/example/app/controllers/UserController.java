@@ -60,7 +60,7 @@ public class UserController {
     public ResponseEntity<Void> updateUser(
             @RequestBody    UserRequest userRequest,
                             WebRequest  request
-    ) {
+    ) throws IOException {
         User user = userService.getUserByJWT(request);
 
         userService.updateUser(user, userRequest, request);
